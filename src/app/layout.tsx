@@ -1,10 +1,7 @@
-import type { Metadata } from "next";
-import StyledComponentsRegistry from "@/lib/registry";
+"use client";
 
-export const metadata: Metadata = {
-  title: "YAGEUM YAGEUM",
-  description: "야금야금 빼먹기",
-};
+import StyledComponentsRegistry from "@/lib/registry";
+import { metadata } from "./metadata";
 
 export default function RootLayout({
   children,
