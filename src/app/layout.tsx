@@ -1,7 +1,6 @@
-"use client";
+'use client';
 
-import StyledComponentsRegistry from "@/lib/registry";
-import { metadata } from "./metadata";
+import StyledComponentsRegistry from '@/lib/registry';
 
 export default function RootLayout({
   children,
@@ -9,7 +8,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html>
+    <html lang="en">
       <body>
         <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
       </body>
