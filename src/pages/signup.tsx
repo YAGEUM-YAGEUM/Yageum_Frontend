@@ -9,7 +9,7 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 400px; /* 최대 너비 설정 */
+  max-width: 400px;
   margin: 60px auto;
   gap: 15px;
 `;
@@ -18,7 +18,10 @@ const Input = styled.input`
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 16px; /* 입력 텍스트 크기 */
+  font-size: 16px;
+`;
+const RadioButtonLabel = styled.label`
+  margin: 0 10px;
 `;
 
 const Button = styled.button`
@@ -39,22 +42,30 @@ function SignupPage() {
   const [email, setEmail] = useState<string>('');
   const [id, setId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [birthDate, setBirthDate] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [role, setRole] = useState<string>('');
   const [interestedRegion, setInterestedRegion] = useState<string>('');
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    console.log({
-      email,
-      id,
-      password,
-      name,
-      birthDate,
-      phoneNumber,
-      interestedRegion,
-    });
+
+    if (password !== confirmPassword) {
+      alert('비밀번호가 일치하지 않습니다.');
+    } else {
+      console.log({
+        email,
+        id,
+        password,
+        name,
+        birthDate,
+        phoneNumber,
+        role,
+        interestedRegion,
+      });
+    }
   };
 
   return (
@@ -80,6 +91,12 @@ function SignupPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <Input
+          type="password"
+          value={confirmPassword}
+          placeholder="비밀번호 확인"
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        />
+        <Input
           type="text"
           value={name}
           placeholder="이름"
@@ -91,18 +108,42 @@ function SignupPage() {
           placeholder="생년월일"
           onChange={(e) => setBirthDate(e.target.value)}
         />
+
         <Input
           type="tel"
           value={phoneNumber}
           placeholder="휴대폰 번호"
           onChange={(e) => setPhoneNumber(e.target.value)}
         />
+
         <Input
           type="text"
           value={interestedRegion}
           placeholder="관심 지역"
           onChange={(e) => setInterestedRegion(e.target.value)}
         />
+        <div>
+          <RadioButtonLabel>
+            <Input
+              type="radio"
+              value="tenant"
+              name="role"
+              checked={role === 'tenant'}
+              onChange={(e) => setRole(e.target.value)}
+            />
+            임차인
+          </RadioButtonLabel>
+          <RadioButtonLabel>
+            <Input
+              type="radio"
+              value="landlord"
+              name="role"
+              checked={role === 'landlord'}
+              onChange={(e) => setRole(e.target.value)}
+            />
+            임대인
+          </RadioButtonLabel>
+        </div>
         <Button type="submit">가입 완료</Button>
       </Form>
     </>
