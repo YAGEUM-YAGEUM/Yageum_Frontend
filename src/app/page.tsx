@@ -7,15 +7,17 @@ import Script from 'next/script';
 import RootLayout from './layout';
 
 const Container = styled.div`
-  background-color: red;
   text-align: center;
+  display: flex;
+  flex-direction: column;
 `;
 
 export default function Home() {
   return (
     <Container>
-      HI!!
+      YAGEUM-YAGEUM
       <Link href="/map">map</Link>
+      <Link href="/signup">signup</Link>
     </Container>
   );
 }
