@@ -92,12 +92,14 @@ function Signup() {
           placeholder="비밀번호"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Input
-          type="password"
-          value={confirmPassword}
-          placeholder="비밀번호 확인"
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
+        {password !== '' ? (
+          <Input
+            type="password"
+            value={confirmPassword}
+            placeholder="비밀번호 확인"
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        ) : null}
         <Input
           type="text"
           value={name}
