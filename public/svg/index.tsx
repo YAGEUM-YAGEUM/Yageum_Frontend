@@ -1,4 +1,4 @@
-// import IconInfo from './info.svg';
+import DownArrow from './bottom_arrow.svg';
 // import IconComment from './comment.svg';
 // import IconGithub from './github.svg';
 // import IconEyeTemplate from './eye-template.svg';
@@ -13,21 +13,4 @@
 // import IconRSS from './rss.svg';
 // import IconSearch from './search.svg';
 
-// export {
-//   IconInfo,
-//   IconComment,
-//   IconGithub,
-//   IconEyeTemplate,
-//   IconEyeBall,
-//   IconEyeClosed,
-//   IconClose,
-//   IconEdit,
-//   IconChevronRight,
-//   IconProviderFacebook,
-//   IconProviderGithub,
-//   IconProviderGoogle,
-//   IconRSS,
-//   IconSearch,
-// };
-
-//이런식으로
+export { DownArrow };
