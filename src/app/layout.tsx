@@ -1,7 +1,7 @@
 'use client';
 
+import Header from '@/components/common/Header';
 import StyledComponentsRegistry from '@/lib/registry';
-import type { AppProps } from 'next/app';
 
 export default function RootLayout({
   children,
@@ -11,6 +11,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <Header />
         <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
       </body>
     </html>
