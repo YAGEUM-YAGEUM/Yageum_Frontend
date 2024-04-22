@@ -8,7 +8,7 @@ import Filter from '@/components/map/filter';
 const Container = styled.div`
   width: 100%;
   background-color: #ededed;
-  height: 100px;
+  height: 80px;
   display: flex;
   flex-direction: row;
   border-bottom: solid 1px black;

@@ -7,13 +7,13 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 400px;
-  height: 100%;
+  height: 100vh;
   background-color: #ededed;
   overflow: hidden;
 `;
 const BoxCategory = styled.div`
   background-color: #ededed;
-  height: 80px;
+  height: 120px;
   border-bottom: solid 1px gray;
   display: flex;
   align-items: center;
@@ -26,17 +26,19 @@ const Category = styled.button<{ active: boolean }>`
   cursor: pointer;
   font-size: 20px;
   margin-right: 5px;
-
+  //animation 추가
   ${({ active }) =>
     active &&
     css`
       font-weight: bold;
       text-decoration: underline;
-      text-decoration-thickness: 6px;
-      text-underline-offset: 30px;
+      text-decoration-thickness: 3px;
+      text-underline-offset: 27px;
     `}
 `;
-
+const BoxContainer = styled.div`
+  overflow-y: auto;
+`;
 const Box = styled.div`
   background-color: #ededed;
   height: 200px;
@@ -92,14 +94,56 @@ export default function leftBoard() {
           </Category>
         ))}
       </BoxCategory>
-      <Box>
-        <Img></Img>
-        <Description>
-          <Price>월세 | 가격 / 가격</Price>
-          <Information>오피스텔 | 건물 정보</Information>
-          <Etc>층수, 넓이, 관리비 등의 기타 정보</Etc>
-        </Description>
-      </Box>
+      <BoxContainer>
+        <Box>
+          <Img></Img>
+          <Description>
+            <Price>월세 | 가격 / 가격</Price>
+            <Information>오피스텔 | 건물 정보</Information>
+            <Etc>층수, 넓이, 관리비 등의 기타 정보</Etc>
+          </Description>
+        </Box>
+        <Box>
+          <Img></Img>
+          <Description>
+            <Price>월세 | 가격 / 가격</Price>
+            <Information>오피스텔 | 건물 정보</Information>
+            <Etc>층수, 넓이, 관리비 등의 기타 정보</Etc>
+          </Description>
+        </Box>
+        <Box>
+          <Img></Img>
+          <Description>
+            <Price>월세 | 가격 / 가격</Price>
+            <Information>오피스텔 | 건물 정보</Information>
+            <Etc>층수, 넓이, 관리비 등의 기타 정보</Etc>
+          </Description>
+        </Box>
+        <Box>
+          <Img></Img>
+          <Description>
+            <Price>월세 | 가격 / 가격</Price>
+            <Information>오피스텔 | 건물 정보</Information>
+            <Etc>층수, 넓이, 관리비 등의 기타 정보</Etc>
+          </Description>
+        </Box>
+        <Box>
+          <Img></Img>
+          <Description>
+            <Price>월세 | 가격 / 가격</Price>
+            <Information>오피스텔 | 건물 정보</Information>
+            <Etc>층수, 넓이, 관리비 등의 기타 정보</Etc>
+          </Description>
+        </Box>
+        <Box>
+          <Img></Img>
+          <Description>
+            <Price>월세 | 가격 / 가격</Price>
+            <Information>오피스텔 | 건물 정보</Information>
+            <Etc>층수, 넓이, 관리비 등의 기타 정보</Etc>
+          </Description>
+        </Box>
+      </BoxContainer>
     </Container>
   );
 }
