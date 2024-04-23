@@ -4,6 +4,7 @@ import styled from 'styled-components';
 // import Link from 'next/link';
 // import type { AppProps } from 'next/app';
 // import Script from 'next/script';
+
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { v4 as uuidv4 } from 'uuid';
 import Sale from '@/components/Sale';
