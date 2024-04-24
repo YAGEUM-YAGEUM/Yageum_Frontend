@@ -8,20 +8,41 @@ const Title = styled.h1`
   text-align: center;
 `;
 
+const FormContainer = styled.div`
+  margin: 0 auto;
+`;
+
 const Form = styled.form`
   display: flex;
+  padding: 30px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   flex-direction: column;
   width: 100%;
   max-width: 400px;
   margin: 60px auto;
   gap: 15px;
 `;
+
+const Label = styled.label`
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  width: 100%;
+  justify-content: space-between;
+`;
+
+const LabelText = styled.span`
+  min-width: 140px;
+  display: inline-block;
+`;
+
 const InputContainer = styled.div`
   position: relative;
   display: flex;
   align-items: center;
   border: 1px solid #ccc;
   border-radius: 4px;
+  flex-grow: 1;
 `;
 
 const Input = styled.input`
@@ -29,7 +50,9 @@ const Input = styled.input`
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
+  flex-grow: 1;
 `;
+
 const PasswordInput = styled.input`
   padding: 10px;
   flex-grow: 1;
@@ -37,8 +60,12 @@ const PasswordInput = styled.input`
   font-size: 16px;
 `;
 
+const ButtonDiv = styled.div`
+  text-align: center;
+`;
+
 const RadioButtonLabel = styled.label`
-  margin: 0 10px;
+  margin: 0 auto;
 `;
 
 const Button = styled.button`
@@ -54,6 +81,7 @@ const Button = styled.button`
     background-color: #0056b3;
   }
 `;
+
 const ToggleButton = styled.button`
   background: none;
   color: #007bff;
@@ -94,90 +122,107 @@ function Signup() {
 
   return (
     <>
-      <Title>Logo</Title>
-      <Form onSubmit={handleSubmit}>
-        <Input
-          type="email"
-          value={email}
-          placeholder="이메일"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Input
-          type="text"
-          value={id}
-          placeholder="아이디"
-          onChange={(e) => setId(e.target.value)}
-        />
-        <InputContainer>
-          <PasswordInput
-            type={showPassword ? 'text' : 'password'}
-            value={password}
-            placeholder="비밀번호"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <ToggleButton onClick={() => setShowPassword(!showPassword)}>
-            {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
-          </ToggleButton>
-        </InputContainer>
-
-        {password !== '' ? (
-          <Input
-            type="password"
-            value={confirmPassword}
-            placeholder="비밀번호 확인"
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-        ) : null}
-        <Input
-          type="text"
-          value={name}
-          placeholder="이름"
-          onChange={(e) => setName(e.target.value)}
-        />
-        <Input
-          type="date"
-          value={birthDate}
-          placeholder="생년월일"
-          onChange={(e) => setBirthDate(e.target.value)}
-        />
-
-        <Input
-          type="tel"
-          value={phoneNumber}
-          placeholder="휴대폰 번호"
-          onChange={(e) => setPhoneNumber(e.target.value)}
-        />
-
-        <Input
-          type="text"
-          value={interestedRegion}
-          placeholder="관심 지역"
-          onChange={(e) => setInterestedRegion(e.target.value)}
-        />
-        <div>
-          <RadioButtonLabel>
+      <Title>회원가입</Title>
+      <FormContainer>
+        <Form onSubmit={handleSubmit}>
+          <Label>
+            <LabelText>이메일</LabelText>
             <Input
-              type="radio"
-              value="tenant"
-              name="role"
-              checked={role === 'tenant'}
-              onChange={(e) => setRole(e.target.value)}
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-            임차인
-          </RadioButtonLabel>
-          <RadioButtonLabel>
+          </Label>
+          <Label>
+            <LabelText>아이디</LabelText>
             <Input
-              type="radio"
-              value="landlord"
-              name="role"
-              checked={role === 'landlord'}
-              onChange={(e) => setRole(e.target.value)}
+              type="text"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
             />
-            임대인
-          </RadioButtonLabel>
-        </div>
-        <Button type="submit">가입 완료</Button>
-      </Form>
+          </Label>
+          <Label>
+            <LabelText>비밀번호</LabelText>
+            <InputContainer>
+              <PasswordInput
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <ToggleButton onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+              </ToggleButton>
+            </InputContainer>
+          </Label>
+          {password !== '' && (
+            <Label>
+              <LabelText>비밀번호 확인</LabelText>
+              <Input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </Label>
+          )}
+          <Label>
+            <LabelText>이름</LabelText>
+            <Input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </Label>
+          <Label>
+            <LabelText>생년월일</LabelText>
+            <Input
+              type="date"
+              value={birthDate}
+              onChange={(e) => setBirthDate(e.target.value)}
+            />
+          </Label>
+          <Label>
+            <LabelText>휴대폰 번호</LabelText>
+            <Input
+              type="tel"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+          </Label>
+          <Label>
+            <LabelText>관심 지역</LabelText>
+            <Input
+              type="text"
+              value={interestedRegion}
+              onChange={(e) => setInterestedRegion(e.target.value)}
+            />
+          </Label>
+          <div>
+            <ButtonDiv>
+              <RadioButtonLabel>
+                <Input
+                  type="radio"
+                  value="tenant"
+                  name="role"
+                  checked={role === 'tenant'}
+                  onChange={(e) => setRole(e.target.value)}
+                />
+                임차인
+              </RadioButtonLabel>
+              <RadioButtonLabel>
+                <Input
+                  type="radio"
+                  value="landlord"
+                  name="role"
+                  checked={role === 'landlord'}
+                  onChange={(e) => setRole(e.target.value)}
+                />
+                임대인
+              </RadioButtonLabel>
+            </ButtonDiv>
+          </div>
+          <Button type="submit">가입 완료</Button>
+        </Form>
+      </FormContainer>
     </>
   );
 }
