@@ -45,6 +45,8 @@ const Input = styled.input`
   border-bottom: solid 1px black;
   outline: none;
   width: 80px;
+  margin-left: 5px;
+  padding-left: 6px;
   /* margin: 5px; */
   /* padding: 5px; */
 `;
@@ -69,32 +71,59 @@ interface FormData {
 
 function ContactForm() {
   const { register, handleSubmit } = useForm<FormData>();
-  // {...register('leaseType')}
 
   const onSubmit = (data: FormData) => {
-    console.log(data);
-    console.log(register);
+    console.log(data, '?');
+    console.log(register, 'zz');
   };
+  const leaseTypeReg = register('leaseType');
+  const lessorNameReg = register('lessorName');
+  const lesseeNameReg = register('lesseeName');
+  const addressReg = register('address');
 
   return (
     <FormContainer onSubmit={handleSubmit(onSubmit)}>
       <Title>부동산 임대차 계약서</Title>
       <ContractBody>
         <TypeInput>
-          <input type="radio" value="전세" name="leaseType" />
+          <input
+            type="radio"
+            value="전세"
+            onChange={leaseTypeReg.onChange}
+            onBlur={leaseTypeReg.onBlur}
+            ref={leaseTypeReg.ref}
+            name="leaseType"
+          />
           전세
-          <input type="radio" value="월세" name="leaseType" />
+          <input
+            type="radio"
+            value="월세"
+            onChange={leaseTypeReg.onChange}
+            onBlur={leaseTypeReg.onBlur}
+            ref={leaseTypeReg.ref}
+            name="leaseType"
+          />
           월세
         </TypeInput>
         <Declaration>
           <div>
             <Label>임대인</Label>
-            <Input name="lessorName" />
+            <Input
+              name="lessorName"
+              onChange={lessorNameReg.onChange}
+              onBlur={lessorNameReg.onBlur}
+              ref={lessorNameReg.ref}
+            />
           </div>
           과&nbsp;&nbsp;
           <div>
             <Label>임차인</Label>
-            <Input name="lesseeName" />
+            <Input
+              name="lesseeName"
+              onChange={lesseeNameReg.onChange}
+              onBlur={lesseeNameReg.onBlur}
+              ref={lesseeNameReg.ref}
+            />
           </div>
           은 아래와 같이 임대차 계약을 체결한다.
         </Declaration>
@@ -102,15 +131,24 @@ function ContactForm() {
           <div>1. 임차주택의 표시</div>
           <div>
             <Label>소재지</Label>
-            <Input name="address" placeholder="도로명주소" />
+            <Input
+              name="address"
+              placeholder="도로명주소"
+              onChange={addressReg.onChange}
+              onBlur={addressReg.onBlur}
+              ref={addressReg.ref}
+            />
           </div>
           <div>
             <Label>면적</Label>
             <Input name="area" />
           </div>
           <div>
-            <Label>계약조건</Label>
+            <Label>계약조건 보증금</Label>
             <Input name="deposit" type="text" placeholder="보증금 입력" />
+          </div>
+          <div>
+            <Label>월차임료</Label>
             <Input name="monthlyRent" type="text" placeholder="월차임료 입력" />
           </div>
         </Information>
