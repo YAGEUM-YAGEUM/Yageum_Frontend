@@ -11,11 +11,13 @@ const Title = styled.h1`
 
 const Form = styled.form`
   display: flex;
+  padding: 30px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   flex-direction: column;
   width: 100%;
   max-width: 400px;
-  margin: 60px auto;
-  gap: 15px;
+  margin: auto;
+  gap: 4px;
 `;
 const InputContainer = styled.div`
   position: relative;
@@ -23,6 +25,7 @@ const InputContainer = styled.div`
   align-items: center;
   border: 1px solid #ccc;
   border-radius: 4px;
+  flex-grow: 1;
 `;
 
 const Input = styled.input`
@@ -30,6 +33,19 @@ const Input = styled.input`
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
+  flex-grow: 1;
+`;
+const Label = styled.label`
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  width: 100%;
+  justify-content: space-between;
+`;
+
+const LabelText = styled.span`
+  min-width: 140px;
+  display: inline-block;
 `;
 const PasswordInput = styled.input`
   padding: 10px;
@@ -90,23 +106,27 @@ function Login() {
     <>
       <Title>로그인</Title>
       <Form onSubmit={handleSubmit}>
-        <Input
-          type="text"
-          value={id}
-          placeholder="아이디"
-          onChange={(e) => setId(e.target.value)}
-        />
-        <InputContainer>
-          <PasswordInput
-            type={showPassword ? 'text' : 'password'}
-            value={password}
-            placeholder="비밀번호"
-            onChange={(e) => setPassword(e.target.value)}
+        <Label>
+          <LabelText>아이디</LabelText>
+          <Input
+            type="text"
+            value={id}
+            onChange={(e) => setId(e.target.value)}
           />
-          <ToggleButton onClick={() => setShowPassword(!showPassword)}>
-            {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
-          </ToggleButton>
-        </InputContainer>
+        </Label>
+        <Label>
+          <LabelText>비밀번호</LabelText>
+          <InputContainer>
+            <PasswordInput
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <ToggleButton onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+            </ToggleButton>
+          </InputContainer>
+        </Label>
         <Button type="submit">로그인</Button>
         <Text>비밀번호 찾기</Text>
       </Form>
