@@ -29,6 +29,11 @@ const Map = ({
       zoom: initialZoom,
       minZoom: 9,
       scaleControl: false,
+      zoomControl: true,
+      zoomControlOptions: {
+        style: naver.maps.ZoomControlStyle.LARGE,
+        position: naver.maps.Position.TOP_RIGHT,
+      },
       mapDataControl: false,
       logoControlOptions: {
         position: naver.maps.Position.BOTTOM_LEFT,
