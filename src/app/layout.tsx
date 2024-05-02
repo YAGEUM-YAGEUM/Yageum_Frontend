@@ -1,8 +1,15 @@
 'use client';
 
+import styled from 'styled-components';
+import { Provider } from 'jotai';
 import Header from '@/components/common/Header';
-import Footer from '@/components/common/Footer';
 import StyledComponentsRegistry from '@/lib/registry';
+
+const PageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+`;
 
 export default function RootLayout({
   children,
@@ -12,9 +19,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Header />
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
-        <Footer />
+        <Provider>
+          <PageContainer>
+            <Header />
+            <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+          </PageContainer>
+        </Provider>
       </body>
     </html>
   );
