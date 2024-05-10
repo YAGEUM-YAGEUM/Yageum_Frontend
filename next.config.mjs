@@ -12,6 +12,9 @@ const nextConfig = {
 
     return config;
   },
+  experimental: {
+    swcPlugins: [['@swc-jotai/react-refresh', {}]],
+  },
 };
 
 export default nextConfig;

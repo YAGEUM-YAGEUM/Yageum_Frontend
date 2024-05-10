@@ -24,6 +24,7 @@ export default function FilterBar() {
       <Filter title="월세|전세|매매" />
       <Filter title="가격" />
       <Link href="/mypage">마이페이지</Link>
+      <Link href="/register">매물등록</Link>
     </Container>
   );
 }

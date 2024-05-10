@@ -60,7 +60,7 @@ function Header() {
         <Link href="/map">지도</Link>
       </Navigation>
       <Navigation>
-        <Link href="/map">매물등록</Link>
+        <Link href="/register">매물등록</Link>
       </Navigation>
       <Navigation>
         <Link href="/map">부동산 가이드</Link>

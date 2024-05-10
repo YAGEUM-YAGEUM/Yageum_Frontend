@@ -1,9 +1,9 @@
 'use client';
 
-import ContactForm from '@/components/contact/contactForm';
+import ContractForm from '@/components/contract/contractForm';
 
 function MyPage() {
-  return <ContactForm />;
+  return <ContractForm />;
 }
 
 export default MyPage;
