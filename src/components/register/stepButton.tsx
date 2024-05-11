@@ -14,6 +14,7 @@ const Button = styled.div`
   padding: 3px;
   font-weight: 600;
   letter-spacing: 0.6px;
+  margin-right: 20px;
 `;
 function StepButton({ num }: StepButtonProps) {
   return <Button>step{num}.</Button>;
