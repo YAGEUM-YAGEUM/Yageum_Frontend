@@ -7,6 +7,9 @@ import StepButton from '@/components/register/stepButton';
 import HLine from '@/components/register/hLine';
 import SearchAddress from '@/components/common/SearchAddress';
 import FormTitle from '@/components/register/formTitle';
+import InputField from '@/components/register/inputField';
+import NextButton from '@/components/register/nextButton';
+import Spacer from '@/components/common/Spacer';
 
 // interface postCode {
 //   address: string;
@@ -78,10 +81,20 @@ const AddressInput = styled.input`
   border-radius: 10px;
   background-color: transparent;
   padding-left: 20px;
+  margin-left: 15px;
+`;
+const RadioButton = styled.label`
+  margin-right: 20px;
 `;
 
 function FirstStep() {
   // 일단 useState 이용해서 상태저장, sendGAEvent 찾아볼 것.
+  const [selectedOption, setSelectedOption] = useState<string>('');
+
+  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedOption(event.target.value);
+  };
+
   const [addressForm, setAddressForm] = useState({
     address: '',
   });
@@ -98,14 +111,18 @@ function FirstStep() {
       <Title>매물등록</Title>
       <CurrentStep step={1} />
       <NeccessaryContainer>
+        <Spacer size={50} />
         <InfoTitle>필수정보</InfoTitle>
+        <Spacer size={30} />
         <InfoHelp>매물 등록을 위한 정보를 입력해주세요</InfoHelp>
+        <Spacer size={40} />
 
         <Step>
           <FormRow>
             <StepButton num={1} />
             <div>매물 종류를 선택해주세요. </div>
           </FormRow>
+          <Spacer size={10} />
           <TypeBox>
             <Type>주택/빌라</Type>
             <Type>오피스텔</Type>
@@ -141,24 +158,61 @@ function FirstStep() {
             <StepButton num={3} />
             <div>매물 크기를 입력해주세요. </div>
           </FormRow>
+          <FormRow>
+            <FormTitle title="매물 크기" />
+            <InputField unit="평" />
+            <InputField unit={'m\xB2'} />
+          </FormRow>
           <HLine />
         </Step>
-
         <Step>
           <FormRow>
             <StepButton num={4} />
             <div>방 정보를 입력해주세요. </div>
           </FormRow>
+          <FormRow>
+            <FormTitle title="방 수" />
+            <InputField unit="개" />
+          </FormRow>
           <HLine />
         </Step>
-
         <Step>
           <FormRow>
             <StepButton num={5} />
             <div>가격 정보를 입력해주세요. </div>
           </FormRow>
-          <HLine />
+          <FormRow>
+            <FormTitle title="보증금/월세" />
+            <InputField unit="" />/
+            <InputField unit="만원" />
+          </FormRow>
+          <FormRow>
+            <FormTitle title="공용관리비" />
+            <RadioButton>
+              <input
+                type="radio"
+                value="no"
+                checked={selectedOption === 'no'}
+                onChange={handleRadioChange}
+              />
+              없음
+            </RadioButton>
+            <RadioButton>
+              <input
+                type="radio"
+                value="yes"
+                checked={selectedOption === 'yes'}
+                onChange={handleRadioChange}
+              />
+              있음
+            </RadioButton>
+
+            {selectedOption === 'yes' && <InputField unit="kg" />}
+          </FormRow>
         </Step>
+        <Spacer size={20} />
+        <NextButton />
+        <Spacer size={80} />
       </NeccessaryContainer>
     </Container>
   );
