@@ -87,7 +87,7 @@ const RadioButton = styled.label`
   margin-right: 20px;
 `;
 
-function FirstStep() {
+function FirstStep({ next }: { next: () => void }) {
   // 일단 useState 이용해서 상태저장, sendGAEvent 찾아볼 것.
   const [selectedOption, setSelectedOption] = useState<string>('');
 
@@ -211,7 +211,7 @@ function FirstStep() {
           </FormRow>
         </Step>
         <Spacer size={20} />
-        <NextButton />
+        <NextButton onClick={next} />
         <Spacer size={80} />
       </NeccessaryContainer>
     </Container>

@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+interface NextButtonProps {
+  onClick: () => void;
+}
+
 const Button = styled.button`
   margin-top: 20px;
   width: 160px;
@@ -10,8 +14,8 @@ const Button = styled.button`
   border-radius: 10px;
 `;
 
-function NextButton() {
-  return <Button>{'Next >'}</Button>;
+function NextButton({ onClick }: NextButtonProps) {
+  return <Button onClick={onClick}>{'Next >'}</Button>;
 }
 
 export default NextButton;
