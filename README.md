@@ -24,19 +24,18 @@ recoil + SWR
 
 ## 프로젝트 시작
 
-First, run the development server:
+## ⏳개발 기간
+2024.02 ~ 진행 중
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ⚙️프론트 기술 스택
+#### Next.js (14) + TypeScript + styled-components
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### - 코딩 컨벤션 환경 
+eslint + prettier + husky
+
+
+### - 전역, 서버 상태 관리
+recoil + SWR
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
