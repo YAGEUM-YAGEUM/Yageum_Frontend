@@ -1,7 +1,15 @@
 'use client';
 
+import styled from 'styled-components';
+import { Provider } from 'jotai';
+import Header from '@/components/common/Header';
 import StyledComponentsRegistry from '@/lib/registry';
-import type { AppProps } from 'next/app';
+
+const PageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+`;
 
 export default function RootLayout({
   children,
@@ -11,7 +19,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        <Provider>
+          <PageContainer>
+            <Header />
+            <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+          </PageContainer>
+        </Provider>
       </body>
     </html>
   );
