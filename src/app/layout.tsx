@@ -13,8 +13,10 @@ const PageContainer = styled.div`
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html lang="en">
@@ -23,6 +25,7 @@ export default function RootLayout({
           <PageContainer>
             <Header />
             <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+            <StyledComponentsRegistry>{modal}</StyledComponentsRegistry>
           </PageContainer>
         </Provider>
       </body>

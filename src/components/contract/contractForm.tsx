@@ -18,13 +18,15 @@ const FormContainer = styled.form`
   line-height: 30px;
   margin-top: 40px;
   border-radius: 10px;
-  background-color: aliceblue;
+  /* background-color: aliceblue; */
+  border: 1px solid;
 `;
 const ContractBody = styled.div`
   margin: 0 auto;
 `;
 const Title = styled.h1`
   font-size: 24px;
+  margin-top: 60px;
   /* justify-content: center; */
 `;
 
@@ -78,12 +80,12 @@ interface FormData {
   lessorName: string;
   lesseeName: string;
   address: string;
-  area: string;
+  exclusive_area: string;
   deposit: number;
   monthlyRent: number;
 }
 
-function ContactForm() {
+function ContractForm() {
   const { register, handleSubmit } = useForm<FormData>();
 
   const onSubmit = (data: FormData) => {
@@ -94,6 +96,7 @@ function ContactForm() {
   const lessorNameReg = register('lessorName');
   const lesseeNameReg = register('lesseeName');
   const addressReg = register('address');
+  const exclusivearea = register('exclusive_area');
 
   return (
     <FormContainer onSubmit={handleSubmit(onSubmit)}>
@@ -154,7 +157,7 @@ function ContactForm() {
         </div>
         <div>
           <Label>면적</Label>
-          <Input name="area" />
+          <Input name="exclusivearea" onChange={exclusivearea.onChange} />
           {'m\xB2'}
         </div>
         <div>
@@ -232,4 +235,4 @@ function ContactForm() {
   );
 }
 
-export default ContactForm;
+export default ContractForm;
