@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
+import Link from 'next/link';
 
 // 새로고침 대비 localstorage
 // 채팅창 내부에서 modal 로 띄워질 예정.
@@ -211,7 +212,6 @@ function ContractForm() {
           </tbody>
         </table>
         <div>
-          {' '}
           (입금 계좌 : <Input size="big" /> )
         </div>
         <div>제2조(임대차 기간)</div>
@@ -226,10 +226,9 @@ function ContractForm() {
         {/* 사인하기 하고 돌아오면 계약서보내기 활성화 */}
         <SubmitButton type="submit">계약서 보내기</SubmitButton>
 
-        <SubmitButton type="submit">
-          사인하기
-          {/* <Link href={'/sign'}>사인하기</Link> */}
-        </SubmitButton>
+        <Link href="/sign">
+          <SubmitButton type="button">사인하기 </SubmitButton>
+        </Link>
       </ContractBody>
     </FormContainer>
   );

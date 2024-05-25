@@ -38,20 +38,24 @@ function Modal({ children }: ModalProps) {
     router.back(); // 라우터 뒤로가기 기능을 이용
   }, [router]);
 
-  function handleMouseDown(e: React.MouseEvent<HTMLElement>) {
+  const handleMouseDown = useCallback((e: React.MouseEvent<HTMLElement>) => {
     clickedRef.current = e.target;
-  }
-  function handleMouseUp(e: React.MouseEvent<HTMLElement>) {
+  }, []);
+
+  const handleMouseUp = useCallback((e: React.MouseEvent<HTMLElement>) => {
     clickedRef.current = e.target;
-  }
+  }, []);
+
   function handleClickClose(e: React.MouseEvent<HTMLElement>) {
     if (clickedRef.current) {
       clickedRef.current = undefined;
+      return;
     }
 
     e.stopPropagation();
     onClose();
   }
+
   return (
     // 모달 외부
     <ModalOuterWrapper onMouseUp={(e) => handleClickClose(e)}>
