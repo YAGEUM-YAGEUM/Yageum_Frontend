@@ -1,12 +1,13 @@
 'use client';
 
 import ContractForm from '@/components/contract/contractForm';
-// import Modal from '@/components/common/Modal';
+import Modal from '@/components/common/Modal';
+
 function ContractModal() {
   return (
-    <div>
+    <Modal>
       <ContractForm />
-    </div>
+    </Modal>
   );
 }
 export default ContractModal;

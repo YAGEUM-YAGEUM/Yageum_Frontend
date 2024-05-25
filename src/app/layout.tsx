@@ -25,7 +25,7 @@ export default function RootLayout({
           <PageContainer>
             <Header />
             <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
-            <StyledComponentsRegistry>{modal}</StyledComponentsRegistry>
+            {modal}
           </PageContainer>
         </Provider>
       </body>
