@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import Sale from '@/components/Sale';
 import Guide from '@/components/Guide';
+
 // import RootLayout from './layout';
 
 const Container = styled.div`
@@ -77,6 +78,7 @@ export default function Home() {
           <Guide key={uuidv4()} />
         ))}
       </GridContainer>
+
       <ContentText>자주 묻는 질문</ContentText>
 
       {Array.from({ length: 4 }).map(() => (

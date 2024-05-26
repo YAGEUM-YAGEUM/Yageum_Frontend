@@ -29,7 +29,7 @@ const Title = styled.h4`
 function Guide() {
   return (
     <Container>
-      <CategoryText>카테고리</CategoryText> {/* 수정된 스타일 컴포넌트 사용 */}
+      <CategoryText>카테고리</CategoryText>
       <Title>
         부동산 가이드
         <br /> 꿀팁 제목
