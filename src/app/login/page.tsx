@@ -7,6 +7,12 @@ import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 const Title = styled.h1`
   text-align: center;
   margin-top: 30px;
+  margin-bottom: 0px;
+`;
+
+const SubTitle = styled.h5`
+  text-align: center;
+  color: #535353;
 `;
 
 const Form = styled.form`
@@ -16,29 +22,30 @@ const Form = styled.form`
   flex-direction: column;
   width: 100%;
   max-width: 400px;
-  margin: auto;
-  gap: 4px;
+  border-radius: 8px;
+  margin: 0 auto;
+  gap: 12px;
 `;
 const InputContainer = styled.div`
   position: relative;
   display: flex;
   align-items: center;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 12px;
   flex-grow: 1;
 `;
 
 const Input = styled.input`
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 12px;
   font-size: 16px;
   flex-grow: 1;
 `;
 const Label = styled.label`
   display: flex;
   align-items: center;
-  margin-bottom: 5px;
+  font-weight: 700;
   width: 100%;
   justify-content: space-between;
 `;
@@ -50,19 +57,19 @@ const LabelText = styled.span`
 const PasswordInput = styled.input`
   padding: 10px;
   flex-grow: 1;
+  border-radius: 12px;
   border: none;
   font-size: 16px;
 `;
 
 const Button = styled.button`
-  background-color: #007bff;
+  background-color: #2400ff;
   color: white;
   padding: 10px;
   border: none;
-  border-radius: 4px;
+  border-radius: 12px;
   cursor: pointer;
   font-size: 16px;
-
   &:hover {
     background-color: #0056b3;
   }
@@ -105,30 +112,27 @@ function Login() {
   return (
     <>
       <Title>로그인</Title>
+      <SubTitle>서비스 이용을 위해 로그인 해주세요.</SubTitle>
       <Form onSubmit={handleSubmit}>
         <Label>
           <LabelText>아이디</LabelText>
-          <Input
-            type="text"
-            value={id}
-            onChange={(e) => setId(e.target.value)}
-          />
         </Label>
+        <Input type="text" value={id} onChange={(e) => setId(e.target.value)} />
         <Label>
           <LabelText>비밀번호</LabelText>
-          <InputContainer>
-            <PasswordInput
-              type={showPassword ? 'text' : 'password'}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <ToggleButton onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
-            </ToggleButton>
-          </InputContainer>
         </Label>
+        <InputContainer>
+          <PasswordInput
+            type={showPassword ? 'text' : 'password'}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <ToggleButton onClick={() => setShowPassword(!showPassword)}>
+            {showPassword ? <AiFillEyeInvisible /> : <AiFillEye />}
+          </ToggleButton>
+        </InputContainer>
         <Button type="submit">로그인</Button>
-        <Text>비밀번호 찾기</Text>
+        <Text>이메일 계정 찾기 | 비밀번호 찾기</Text>
       </Form>
     </>
   );
