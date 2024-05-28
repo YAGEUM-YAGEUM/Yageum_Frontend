@@ -21,6 +21,7 @@ const FormContainer = styled.form`
   border-radius: 10px;
   /* background-color: aliceblue; */
   border: 1px solid;
+  line-height: 50px;
 `;
 const ContractBody = styled.div`
   margin: 0 auto;

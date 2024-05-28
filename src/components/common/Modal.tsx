@@ -24,9 +24,17 @@ const ModalInnerWrapper = styled.div`
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-  max-width: 80%;
-  max-height: 80%;
+  width: 80vw;
+  height: 80vh;
   overflow: auto;
+`;
+const CloseButton = styled.button`
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  background: none;
+  float: right;
 `;
 
 function Modal({ children }: ModalProps) {
@@ -60,14 +68,15 @@ function Modal({ children }: ModalProps) {
     // 모달 외부
     <ModalOuterWrapper onMouseUp={(e) => handleClickClose(e)}>
       {/* // 모달 내부 */}
+
       <ModalInnerWrapper
         onMouseDown={(e) => handleMouseDown(e)}
         onMouseUp={(e) => handleMouseUp(e)}
       >
+        <CloseButton type="button" onClick={(e) => handleClickClose(e)}>
+          X 닫기
+        </CloseButton>
         {children}
-        <button type="button" onClick={handleClickClose}>
-          닫기
-        </button>
       </ModalInnerWrapper>
     </ModalOuterWrapper>
   );
