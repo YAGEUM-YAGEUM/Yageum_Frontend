@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
+import Button from '../common/Button';
 
 // 새로고침 대비 localstorage
 // 채팅창 내부에서 modal 로 띄워질 예정.
@@ -67,14 +68,6 @@ const Input = styled.input<InputProps>`
   padding-left: 6px;
   /* margin: 5px; */
   /* padding: 5px; */
-`;
-
-const SubmitButton = styled.button`
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
 `;
 
 interface FormData {
@@ -225,10 +218,14 @@ function ContractForm() {
           개월간으로 한다.
         </div>
         {/* 사인하기 하고 돌아오면 계약서보내기 활성화 */}
-        <SubmitButton type="submit">계약서 보내기</SubmitButton>
+        <Button type="submit" width={110}>
+          계약서 보내기
+        </Button>
 
         <Link href="/sign">
-          <SubmitButton type="button">사인하기 </SubmitButton>
+          <Button type="button" width={110}>
+            사인하기
+          </Button>
         </Link>
       </ContractBody>
     </FormContainer>

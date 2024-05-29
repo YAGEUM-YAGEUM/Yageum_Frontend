@@ -4,7 +4,7 @@ interface ButtonProps {
   width: number;
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   children: string;
-  type?: 'button' | 'submit' | 'reset'; // type 속성 추가
+  type?: 'button' | 'submit' | 'reset';
 }
 const ButtonWrapper = styled.div<ButtonProps>`
   height: 35px;
