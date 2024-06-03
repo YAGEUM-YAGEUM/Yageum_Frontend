@@ -65,7 +65,7 @@ function SignatureModal() {
         .getTrimmedCanvas()
         .toDataURL('image/png');
       console.log(dataUrl);
-      // You can also send this dataUrl to your server or use it in other ways
+      // const signatureHash = web3.utils.sha3(dataUrl);
     }
   };
 
@@ -112,7 +112,7 @@ function SignatureModal() {
           >
             지우기
           </CanvasButton>
-          <CanvasButton onClick={save}>저장하기</CanvasButton>
+          <CanvasButton onClick={save}>저장하기/(임시)보내기</CanvasButton>
         </CanvasButtonWrapper>
         <Spacer size={20} />
         <Button width={110}>계약서 완성하기</Button>

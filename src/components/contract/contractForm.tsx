@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
+import useWeb3 from '@/hooks/contract/useWeb3';
 import Button from '../common/Button';
 
 // 새로고침 대비 localstorage
@@ -81,11 +82,19 @@ interface FormData {
 }
 
 function ContractForm() {
+  const account = useWeb3();
   const { register, handleSubmit } = useForm<FormData>();
-
   const onSubmit = (data: FormData) => {
     console.log(data, '?');
     console.log(register, 'zz');
+  };
+
+  const checkAccount = () => {
+    console.log('check!');
+    if (account) console.log('잇대', account);
+    else {
+      console.log('없댕 ', { account });
+    }
   };
   const leaseTypeReg = register('leaseType');
   const lessorNameReg = register('lessorName');
@@ -218,7 +227,7 @@ function ContractForm() {
           개월간으로 한다.
         </div>
         {/* 사인하기 하고 돌아오면 계약서보내기 활성화 */}
-        <Button type="submit" width={110}>
+        <Button type="submit" width={110} onClick={checkAccount}>
           계약서 보내기
         </Button>
 
