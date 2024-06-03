@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 const SidebarContainer = styled.aside`
   width: 200px;
+  height: 300px;
   margin: 20px 0px 0px 40px;
   border-radius: 10px;
   padding: 20px;
