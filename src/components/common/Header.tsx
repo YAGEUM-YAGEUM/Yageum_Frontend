@@ -1,4 +1,3 @@
-// components/Header.js 또는 Header.tsx
 import Link from 'next/link';
 import styled from 'styled-components';
 
@@ -13,12 +12,33 @@ const HeaderContainer = styled.header`
 
 const Logo = styled.h1`
   font-size: 24px;
-  text-color: black;
+  color: black;
 
   a {
     text-decoration: none;
     color: black;
   }
+`;
+
+const SearchContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+`;
+
+const SearchInput = styled.input`
+  padding: 0.5rem 1rem 0.5rem 2.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+`;
+
+const SearchIcon = styled.svg`
+  position: absolute;
+  right: 10px;
+  width: 16px;
+  height: 16px;
+  fill: #ccc;
 `;
 
 const UserContainer = styled.div`
@@ -39,7 +59,6 @@ const Navigation = styled.nav`
 const Button = styled.button`
   border-style: none;
   background-color: transparent;
-  border: 1px solid;
 
   a {
     color: inherit; // 버튼 색상 상속
@@ -53,6 +72,12 @@ function Header() {
       <Logo>
         <Link href="/">YAGUEM YAGEUM</Link>
       </Logo>
+      <SearchContainer>
+        <SearchIcon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M21.53 20.47l-4.6-4.6a8.49 8.49 0 1 0-1.06 1.06l4.6 4.6a.75.75 0 0 0 1.06-1.06zM10.5 17a6.5 6.5 0 1 1 6.5-6.5 6.51 6.51 0 0 1-6.5 6.5z" />
+        </SearchIcon>
+        <SearchInput type="text" placeholder="검색어를 입력하세요." />
+      </SearchContainer>
       <Navigation>
         <Link href="/about">소개</Link>
       </Navigation>
@@ -63,15 +88,16 @@ function Header() {
         <Link href="/register">매물등록</Link>
       </Navigation>
       <Navigation>
-        <Link href="/map">부동산 가이드</Link>
+        <Link href="/guide">부동산 가이드</Link>
       </Navigation>
       <Navigation>
-        <Link href="/map">Q&A</Link>
+        <Link href="/qa">Q&A</Link>
       </Navigation>
       <UserContainer>
         <Button>
-          <Link href="/login">로그인</Link>
+          <Link href="/login">로그인 </Link>
         </Button>
+        |
         <Button>
           <Link href="/signup">회원가입</Link>
         </Button>
