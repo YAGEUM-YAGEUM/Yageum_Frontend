@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+interface ButtonProps {
+  $liked: boolean;
+}
 const Container = styled.div`
   position: relative;
   margin-top: 20px;
@@ -20,7 +23,7 @@ const Image = styled.img`
   opacity: 0.5;
 `;
 
-const HeartButton = styled.button`
+const HeartButton = styled.button<ButtonProps>`
   position: absolute;
   top: 10px;
   right: 10px;
@@ -35,8 +38,8 @@ const HeartButton = styled.button`
   justify-content: center;
 
   svg {
-    fill: ${(props) => (props.liked ? 'red' : 'transparent')};
-    stroke: ${(props) => (props.liked ? 'red' : 'gray')};
+    fill: ${(ButtonProps) => (ButtonProps.$liked ? 'red' : 'transparent')};
+    stroke: ${(ButtonProps) => (ButtonProps.$liked ? 'red' : 'gray')};
     stroke-width: 2px;
     transition:
       fill 0.3s ease,
@@ -64,7 +67,7 @@ function Sale() {
         <Image src="apartment.jpg" alt="부동산 사진" />
         <HeartButton
           onClick={() => setLiked(!liked)}
-          liked={liked}
+          $liked={liked}
           aria-label="like button"
         >
           <svg
