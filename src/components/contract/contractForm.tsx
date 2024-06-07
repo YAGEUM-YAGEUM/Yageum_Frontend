@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { useForm } from 'react-hook-form';
-import Link from 'next/link';
-import useWeb3 from '@/hooks/contract/useWeb3';
+import { useForm, SubmitHandler } from 'react-hook-form';
+// import useWeb3 from '@/hooks/contract/useWeb3';
+import { useRouter } from 'next/navigation';
 import Button from '../common/Button';
+
+// uint deposit; // 보증금
+// uint rentAmount; // 월세
+// string propertyAddress; // 매물 주소
+// string specialTerms; // 특약사항
+// string lessorSignaturePad; // 임대인의 사인패드 서명 값
+// string tenantSignaturePad; // 임차인의 사인패드 서명 값 요것만 저장되도록
 
 // 새로고침 대비 localstorage
 // 채팅창 내부에서 modal 로 띄워질 예정.
 
 interface InputProps {
   size?: string;
+  value?: string;
 }
 const FormContainer = styled.form`
   display: flex;
@@ -70,81 +78,77 @@ const Input = styled.input<InputProps>`
   /* margin: 5px; */
   /* padding: 5px; */
 `;
-
+const Textarea = styled.textarea`
+  width: 90%;
+  height: 100px;
+  resize: none;
+`;
 interface FormData {
-  leaseType: '전세' | '월세';
-  lessorName: string;
-  lesseeName: string;
-  address: string;
-  exclusive_area: string;
   deposit: number;
-  monthlyRent: number;
+  rentAmount: number;
+  propertyAddress: string;
+  specialTerms?: string;
 }
 
 function ContractForm() {
-  const account = useWeb3();
-  const { register, handleSubmit } = useForm<FormData>();
-  const onSubmit = (data: FormData) => {
-    console.log(data, '?');
-    console.log(register, 'zz');
-  };
+  const router = useRouter();
+  // const account = useWeb3();
+  const { register, handleSubmit, setValue, watch } = useForm<FormData>();
+  const formValues = watch();
 
-  const checkAccount = () => {
-    console.log('check!');
-    if (account) console.log('잇대', account);
-    else {
-      console.log('없댕 ', { account });
+  useEffect(() => {
+    console.log(localStorage.getItem('contractFormData'));
+
+    console.log('Component mounted or setValue changed');
+    // const storedFormData = typeof window !== 'undefined' ? localStorage.getItem('storedFormData') : null;
+
+    const storedFormData = localStorage.getItem('contractFormData');
+    if (storedFormData) {
+      const parsedFormData = JSON.parse(storedFormData);
+      console.log(parsedFormData, '이랍니다');
+      Object.keys(parsedFormData).forEach((key) => {
+        setValue(key as keyof FormData, parsedFormData[key]);
+      });
     }
-  };
-  const leaseTypeReg = register('leaseType');
-  const lessorNameReg = register('lessorName');
-  const lesseeNameReg = register('lesseeName');
-  const addressReg = register('address');
-  const exclusivearea = register('exclusive_area');
+  }, [setValue]);
 
+  const toSign = () => {
+    // console.log(data);
+    const formData = JSON.stringify(formValues);
+    localStorage.setItem('contractFormData', formData);
+    router.push('/sign');
+  };
+
+  const onSubmit: SubmitHandler<FormData> = (data) => {
+    console.log(data);
+  };
+
+  // const checkAccount = () => {
+  //   console.log('check!');
+  //   if (account) console.log('잇대', account);
+  //   else {
+  //     console.log('없댕 ', { account });
+  //   }
+  // };
   return (
     <FormContainer onSubmit={handleSubmit(onSubmit)}>
       <Title>부동산 임대차 계약서</Title>
       <ContractBody>
         <TypeInput>
-          <input
-            type="radio"
-            value="전세"
-            onChange={leaseTypeReg.onChange}
-            onBlur={leaseTypeReg.onBlur}
-            ref={leaseTypeReg.ref}
-            name="leaseType"
-          />
+          <input type="radio" value="전세" />
           전세
-          <input
-            type="radio"
-            value="월세"
-            onChange={leaseTypeReg.onChange}
-            onBlur={leaseTypeReg.onBlur}
-            ref={leaseTypeReg.ref}
-            name="leaseType"
-          />
+          <input type="radio" value="월세" />
           월세
         </TypeInput>
         <Declaration>
           <div>
             <Label>임대인</Label>
-            <Input
-              name="lessorName"
-              onChange={lessorNameReg.onChange}
-              onBlur={lessorNameReg.onBlur}
-              ref={lessorNameReg.ref}
-            />
+            <Input placeholder="임대인 이름" />
           </div>
           과&nbsp;&nbsp;
           <div>
             <Label>임차인</Label>
-            <Input
-              name="lesseeName"
-              onChange={lesseeNameReg.onChange}
-              onBlur={lesseeNameReg.onBlur}
-              ref={lesseeNameReg.ref}
-            />
+            <Input placeholder="임차인 이름" />
           </div>
           은 아래와 같이 임대차 계약을 체결한다.
         </Declaration>
@@ -152,25 +156,35 @@ function ContractForm() {
         <div>
           <Label>소재지</Label>
           <Input
-            name="address"
+            // value={getValues('propertyAddress')}
             placeholder="도로명주소"
-            onChange={addressReg.onChange}
-            onBlur={addressReg.onBlur}
-            ref={addressReg.ref}
+            {...register('propertyAddress')}
           />
+          {/* {formValues.propertyAddress} */}
         </div>
         <div>
           <Label>면적</Label>
-          <Input name="exclusivearea" onChange={exclusivearea.onChange} />
+          <Input
+            placeholder="면적"
+            // value="면적"
+          />
           {'m\xB2'}
         </div>
         <div>
           <Label>월세(전세) 보증금</Label>
-          <Input name="deposit" type="text" placeholder="보증금 입력" />
+          <Input
+            type="text"
+            placeholder="보증금 입력"
+            {...register('deposit')}
+          />
         </div>
         <div>
           <Label>월 차임료</Label>
-          <Input name="monthlyRent" type="text" placeholder="월차임료 입력" />
+          <Input
+            type="text"
+            placeholder="월차임료 입력"
+            {...register('rentAmount')}
+          />
         </div>
         <div>2. 계약 내용</div>
         <div>
@@ -182,7 +196,7 @@ function ContractForm() {
             <tr>
               <td>계약금</td>
               <td>
-                <Input />
+                <Input type="text" />
                 원정은 계약시 지불하고,
               </td>
             </tr>
@@ -190,7 +204,7 @@ function ContractForm() {
               <td>중도금</td>
               <td>
                 <Input />
-                원정은 <Input size="small" />년 <Input size="small" />월{' '}
+                원정은 <Input size="small" />년 <Input size="small" />월
                 <Input size="small" />
                 일에 지불하며,
               </td>
@@ -199,7 +213,7 @@ function ContractForm() {
               <td>잔금</td>
               <td>
                 <Input />
-                원정은 <Input size="small" />년 <Input size="small" />월{' '}
+                원정은 <Input size="small" />년 <Input size="small" />월
                 <Input size="small" />
                 일에 지불한다.
               </td>
@@ -226,16 +240,30 @@ function ContractForm() {
           일까지 <Input size="small" />
           개월간으로 한다.
         </div>
+        <div>특약 사항</div>
+        <Textarea {...register('specialTerms')} />
         {/* 사인하기 하고 돌아오면 계약서보내기 활성화 */}
-        <Button type="submit" width={110} onClick={checkAccount}>
+        {/* <Button type="submit" width={110} onClick={checkAccount}> */}
+
+        {/* <Button
+          type="submit"
+          width={110}
+          // onClick={(e) => {
+          //   onSubmit();
+          // }}
+        >
           계약서 보내기
+        </Button> */}
+        <Button width={110} disabled>
+          어어
+          <input type="submit" />
         </Button>
 
-        <Link href="/sign">
-          <Button type="button" width={110}>
-            사인하기
-          </Button>
-        </Link>
+        {/* <Link href="/sign" scroll={false}> */}
+        <Button type="button" width={110} onClick={toSign}>
+          사인하기
+        </Button>
+        {/* </Link> */}
       </ContractBody>
     </FormContainer>
   );
