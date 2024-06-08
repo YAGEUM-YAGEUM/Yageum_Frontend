@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import WebSocketService from '@/api/socket';
 import { getChatHistory, exitChatRoom } from '@/api/chat.api';
@@ -77,8 +77,9 @@ const ExitButton = styled.button`
 function Chat({ roomNo, token }: { roomNo: number; token: string }) {
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState<string>('');
-  const websocketService = new WebSocketService(token);
+
   const username = 'yageum12'; // 예시
+  const websocketService = useMemo(() => new WebSocketService(token), [token]);
 
   useEffect(() => {
     websocketService.connect(roomNo.toString(), (message) => {
