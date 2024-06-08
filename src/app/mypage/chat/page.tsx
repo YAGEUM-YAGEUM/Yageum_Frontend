@@ -1,12 +1,12 @@
-'use client';
-
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import ChatButton from '@/components/common/ChatButton';
 import { getChatRooms, setAuthToken } from '@/api/chat.api';
+import CreateChatRoom from '@/components/common/CreateChatRoom';
 
 const Container = styled.div`
   display: flex;
+  flex-direction: column;
   margin: 20px;
 `;
 
@@ -54,8 +54,9 @@ function ChatPage({ token }: { token: string }) {
 
   return (
     <Container>
+      <h1>마이페이지</h1>
+      <CreateChatRoom />
       <Content>
-        <h1>마이페이지</h1>
         <Table>
           <Thead>
             <Tr>
