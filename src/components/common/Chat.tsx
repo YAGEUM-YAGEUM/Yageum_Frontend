@@ -1,7 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import WebSocketService from '@/api/socket';
+import { getChatHistory, exitChatRoom } from '@/api/chat.api';
 
 const ChatContainer = styled.div`
   display: flex;
@@ -62,24 +64,60 @@ const SendButton = styled.button`
   cursor: pointer;
 `;
 
-function Chat() {
-  const [messages, setMessages] = useState<string[]>([]);
+const ExitButton = styled.button`
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #ff0000;
+  color: white;
+  cursor: pointer;
+  margin-top: 1rem;
+`;
+
+function Chat({ roomNo, token }: { roomNo: number; token: string }) {
+  const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState<string>('');
+  const websocketService = new WebSocketService(token);
+  const username = 'yageum12'; // 예시
+
+  useEffect(() => {
+    websocketService.connect(roomNo.toString(), (message) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
+    });
+
+    // 채팅 내역 불러오기
+    getChatHistory(roomNo).then((response) => {
+      setMessages(response.data.chatList);
+    });
+
+    return () => {
+      websocketService.disconnect();
+    };
+  }, [roomNo, websocketService]);
 
   const sendMessage = () => {
     if (input.trim() !== '') {
-      setMessages([...messages, input]);
+      websocketService.sendMessage(`/pub/chat/talk/${roomNo}`, {
+        content: input,
+      });
       setInput('');
     }
   };
 
+  const exitRoom = () => {
+    exitChatRoom(roomNo, username).then(() => {
+      websocketService.disconnect();
+      alert('채팅방을 퇴장하였습니다.');
+    });
+  };
+
   return (
     <ChatContainer>
-      <Header>user</Header>
+      <Header>Chat Room {roomNo}</Header>
       <MessagesContainer>
         {messages.map((msg, index) => (
           // eslint-disable-next-line react/no-array-index-key
-          <Message key={index}>{msg}</Message>
+          <Message key={index}>{msg.content}</Message>
         ))}
       </MessagesContainer>
       <InputContainer>
@@ -91,6 +129,7 @@ function Chat() {
         />
         <SendButton onClick={sendMessage}>전송</SendButton>
       </InputContainer>
+      <ExitButton onClick={exitRoom}>퇴장</ExitButton>
     </ChatContainer>
   );
 }

@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Modal from './Modal';
@@ -15,16 +13,12 @@ const ChatButtonStyled = styled.button`
   font-size: 1rem;
 `;
 
-function ChatButton() {
+function ChatButton({ roomNo, token }: { roomNo: number; token: string }) {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   const openChat = () => {
     setIsChatOpen(true);
   };
-
-  // const closeChat = () => {
-  //   setIsChatOpen(false);
-  // };
 
   return (
     <div>
@@ -32,7 +26,7 @@ function ChatButton() {
 
       {isChatOpen && (
         <Modal>
-          <Chat />
+          <Chat roomNo={roomNo} token={token} />
         </Modal>
       )}
     </div>

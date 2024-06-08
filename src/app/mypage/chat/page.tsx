@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import ChatButton from '@/components/common/ChatButton';
+import { getChatRooms, setAuthToken } from '@/api/chat.api';
 
 const Container = styled.div`
   display: flex;
@@ -41,25 +42,15 @@ const Td = styled.td`
   border-bottom: 1px solid #ccc;
 `;
 
-export default function Chat() {
-  const dummyData = [
-    {
-      id: '임차인 아이디 어쩌구',
-      info: '오피스텔 | 전세 | 서대문구',
-    },
-    {
-      id: '임차인 아이디 어쩌구 2',
-      info: '단독주택 | 월세 | 강남구',
-    },
-    {
-      id: '임차인 아이디 어쩌구 3',
-      info: '오피스텔 | 전세 | 서대문구',
-    },
-    {
-      id: '임대인 아이디 어쩌구 1',
-      info: '단독주택 | 월세 | 강남구',
-    },
-  ];
+function ChatPage({ token }: { token: string }) {
+  const [chatRooms, setChatRooms] = useState<any[]>([]);
+
+  useEffect(() => {
+    setAuthToken(token);
+    getChatRooms().then((response) => {
+      setChatRooms(response.data);
+    });
+  }, [token]);
 
   return (
     <Container>
@@ -74,13 +65,15 @@ export default function Chat() {
             </Tr>
           </Thead>
           <tbody>
-            {dummyData.map((item, index) => (
+            {chatRooms.map((room, index) => (
               // eslint-disable-next-line react/no-array-index-key
               <Tr key={index}>
-                <Td>{item.id}</Td>
-                <Td>{item.info}</Td>
                 <Td>
-                  <ChatButton />
+                  {room.creatorId} | {room.participantId}
+                </Td>
+                <Td>{room.houseId}</Td>
+                <Td>
+                  <ChatButton roomNo={room.chatRoomNo} token={token} />
                 </Td>
               </Tr>
             ))}
@@ -90,3 +83,5 @@ export default function Chat() {
     </Container>
   );
 }
+
+export default ChatPage;
