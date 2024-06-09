@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import WebSocketService from '@/api/socket';
+import { useWebSocket } from '@/context/WebSocketContext';
 import { getChatHistory, exitChatRoom } from '@/api/chat.api';
 
 const ChatContainer = styled.div`
@@ -74,40 +74,55 @@ const ExitButton = styled.button`
   margin-top: 1rem;
 `;
 
-function Chat({ roomNo, token }: { roomNo: number; token: string }) {
+interface ChatProps {
+  roomNo: number;
+}
+
+function Chat({ roomNo }: ChatProps) {
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState<string>('');
-
   const username = 'yageum12'; // 예시
-  const websocketService = useMemo(() => new WebSocketService(token), [token]);
+  const websocketService = useWebSocket();
 
   useEffect(() => {
-    websocketService.connect(roomNo.toString(), (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-    });
+    if (websocketService) {
+      websocketService.connect(roomNo.toString(), (message) => {
+        setMessages((prevMessages) => [...prevMessages, message]);
+      });
 
-    // 채팅 내역 불러오기
-    getChatHistory(roomNo).then((response) => {
-      setMessages(response.data.chatList);
-    });
+      getChatHistory(roomNo).then((response) => {
+        setMessages(response.data.chatList);
+      });
 
-    return () => {
-      websocketService.disconnect();
-    };
+      return () => {
+        websocketService.disconnect();
+      };
+    }
+
+    return () => {};
   }, [roomNo, websocketService]);
 
   const sendMessage = () => {
     if (input.trim() !== '') {
-      websocketService.sendMessage(`/pub/chat/talk/${roomNo}`, {
+      const message = {
+        roomId: roomNo,
+        contentType: 'TALK',
         content: input,
-      });
+      };
+      websocketService?.sendMessage(`/pub/chat/talk/${roomNo}`, message);
       setInput('');
     }
   };
 
   const exitRoom = () => {
+    const message = {
+      roomId: roomNo,
+      contentType: 'EXIT',
+      content: `${username} 님이 퇴장하셨습니다.`,
+    };
+    websocketService?.sendMessage(`/pub/chat/talk/${roomNo}`, message);
     exitChatRoom(roomNo, username).then(() => {
-      websocketService.disconnect();
+      websocketService?.disconnect();
       alert('채팅방을 퇴장하였습니다.');
     });
   };

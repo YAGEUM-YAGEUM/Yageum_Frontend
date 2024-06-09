@@ -13,7 +13,7 @@ const ChatButtonStyled = styled.button`
   font-size: 1rem;
 `;
 
-function ChatButton({ roomNo, token }: { roomNo: number; token: string }) {
+function ChatButton({ roomNo }: { roomNo: number }) {
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   const openChat = () => {
@@ -26,7 +26,7 @@ function ChatButton({ roomNo, token }: { roomNo: number; token: string }) {
 
       {isChatOpen && (
         <Modal>
-          <Chat roomNo={roomNo} token={token} />
+          <Chat roomNo={roomNo} />
         </Modal>
       )}
     </div>

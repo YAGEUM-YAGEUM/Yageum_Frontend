@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ChatButton from '@/components/common/ChatButton';
 import { getChatRooms, setAuthToken } from '@/api/chat.api';
@@ -45,17 +47,21 @@ const Td = styled.td`
 function ChatPage({ token }: { token: string }) {
   const [chatRooms, setChatRooms] = useState<any[]>([]);
 
-  useEffect(() => {
-    setAuthToken(token);
+  const fetchChatRooms = () => {
     getChatRooms().then((response) => {
       setChatRooms(response.data);
     });
+  };
+
+  useEffect(() => {
+    setAuthToken(token);
+    fetchChatRooms();
   }, [token]);
 
   return (
     <Container>
       <h1>마이페이지</h1>
-      <CreateChatRoom />
+      <CreateChatRoom onCreate={fetchChatRooms} />
       <Content>
         <Table>
           <Thead>
@@ -74,7 +80,7 @@ function ChatPage({ token }: { token: string }) {
                 </Td>
                 <Td>{room.houseId}</Td>
                 <Td>
-                  <ChatButton roomNo={room.chatRoomNo} token={token} />
+                  <ChatButton roomNo={room.chatRoomNo} />
                 </Td>
               </Tr>
             ))}
