@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useWebSocket } from '@/context/WebSocketContext';
 import Modal from './Modal';
 import Chat from './Chat';
 
@@ -15,8 +16,14 @@ const ChatButtonStyled = styled.button`
 
 function ChatButton({ roomNo }: { roomNo: number }) {
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const websocketService = useWebSocket();
 
   const openChat = () => {
+    if (websocketService) {
+      websocketService.subscribe(roomNo.toString(), (message) => {
+        console.log('Received message:', message);
+      });
+    }
     setIsChatOpen(true);
   };
 

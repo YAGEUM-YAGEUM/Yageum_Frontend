@@ -1,4 +1,4 @@
-import { Client, StompSubscription } from '@stomp/stompjs';
+import { Client, StompSubscription, IFrame } from '@stomp/stompjs';
 
 class WebSocketService {
   private client: Client;
@@ -23,26 +23,27 @@ class WebSocketService {
     });
   }
 
-  connect(chatRoomId: string, onMessage: (message: any) => void) {
+  connect(onConnect: () => void) {
     this.client.onConnect = () => {
-      this.subscription = this.client.subscribe(
-        `/sub/chat/room/${chatRoomId}`,
-        (message) => {
-          onMessage(JSON.parse(message.body));
-        },
-      );
       console.log('WebSocket connected');
+      onConnect();
     };
 
-    // this.client.onStompError = (frame: {
-    //   headers: { message: any };
-    //   body: any;
-    // }) => {
-    //   console.error(`에러: ${frame.headers.message}`);
-    //   console.error(`세부내용: ${frame.body}`);
-    // };
+    this.client.onStompError = (frame: IFrame) => {
+      console.error(`Broker reported error: ${frame.headers.message}`);
+      console.error(`Additional details: ${frame.body}`);
+    };
 
     this.client.activate();
+  }
+
+  subscribe(chatRoomId: string, onMessage: (message: any) => void) {
+    this.subscription = this.client.subscribe(
+      `/sub/chat/room/${chatRoomId}`,
+      (message) => {
+        onMessage(JSON.parse(message.body));
+      },
+    );
   }
 
   sendMessage(destination: string, message: any) {

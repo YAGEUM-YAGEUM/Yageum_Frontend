@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import ChatButton from '@/components/common/ChatButton';
 import { getChatRooms, setAuthToken } from '@/api/chat.api';
 import CreateChatRoom from '@/components/common/CreateChatRoom';
+import { useWebSocket } from '@/context/WebSocketContext';
 
 const Container = styled.div`
   display: flex;
@@ -46,12 +47,21 @@ const Td = styled.td`
 
 function ChatPage({ token }: { token: string }) {
   const [chatRooms, setChatRooms] = useState<any[]>([]);
+  const websocketService = useWebSocket();
 
   const fetchChatRooms = () => {
     getChatRooms().then((response) => {
       setChatRooms(response.data);
     });
   };
+
+  useEffect(() => {
+    if (websocketService) {
+      websocketService.connect(() => {
+        fetchChatRooms();
+      });
+    }
+  }, [websocketService]);
 
   useEffect(() => {
     setAuthToken(token);

@@ -84,22 +84,23 @@ function Chat({ roomNo }: ChatProps) {
   const username = 'yageum12'; // 예시
   const websocketService = useWebSocket();
 
+  // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (websocketService) {
-      websocketService.connect(roomNo.toString(), (message) => {
-        setMessages((prevMessages) => [...prevMessages, message]);
-      });
+      websocketService.connect(() => {
+        websocketService.subscribe(roomNo.toString(), (message: any) => {
+          setMessages((prevMessages) => [...prevMessages, message]);
+        });
 
-      getChatHistory(roomNo).then((response) => {
-        setMessages(response.data.chatList);
+        getChatHistory(roomNo).then((response) => {
+          setMessages(response.data.chatList);
+        });
       });
 
       return () => {
         websocketService.disconnect();
       };
     }
-
-    return () => {};
   }, [roomNo, websocketService]);
 
   const sendMessage = () => {
