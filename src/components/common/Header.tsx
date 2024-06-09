@@ -39,6 +39,9 @@ function Header() {
         <li>
           <Link href="/qa">Q&A</Link>
         </li>
+        <li>
+          <Link href="/mypage">마이페이지</Link>
+        </li>
       </ul>
       <div className={styles.userContainer}>
         <button type="button" className={styles.button}>
