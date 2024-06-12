@@ -1,3 +1,5 @@
+/* eslint-disable react/button-has-type */
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -47,6 +49,7 @@ const Td = styled.td`
 
 function ChatPage({ token }: { token: string }) {
   const [chatRooms, setChatRooms] = useState<any[]>([]);
+  const [selectedRoomNo, setSelectedRoomNo] = useState<number | null>(null);
   const websocketService = useWebSocket();
 
   const fetchChatRooms = () => {
@@ -68,6 +71,15 @@ function ChatPage({ token }: { token: string }) {
     fetchChatRooms();
   }, [token]);
 
+  const handleRoomSelect = (roomNo: number) => {
+    if (websocketService) {
+      websocketService.subscribe(roomNo.toString(), (message: any) => {
+        console.log('Received message:', message);
+      });
+      setSelectedRoomNo(roomNo);
+    }
+  };
+
   return (
     <Container>
       <h1>마이페이지</h1>
@@ -79,6 +91,7 @@ function ChatPage({ token }: { token: string }) {
               <Th>임차인 | 임대인 ID</Th>
               <Th>매물 정보</Th>
               <Th>거래 상태</Th>
+              <Th>Actions</Th>
             </Tr>
           </Thead>
           <tbody>
@@ -90,7 +103,14 @@ function ChatPage({ token }: { token: string }) {
                 </Td>
                 <Td>{room.houseId}</Td>
                 <Td>
-                  <ChatButton roomNo={room.chatRoomNo} />
+                  <button onClick={() => handleRoomSelect(room.chatRoomNo)}>
+                    입장
+                  </button>
+                </Td>
+                <Td>
+                  {selectedRoomNo === room.chatRoomNo && (
+                    <ChatButton roomNo={room.chatRoomNo} />
+                  )}
                 </Td>
               </Tr>
             ))}
