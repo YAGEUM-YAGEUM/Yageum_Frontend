@@ -1,7 +1,13 @@
 import axios from 'axios';
 
+
+interface ChatRoomRequestDto {
+  houseId: number;
+  participantId: number;
+}
+
 const apiClient = axios.create({
-  baseURL: 'http://backend-url/api/v1',
+  baseURL: 'http://localhost:8080',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -11,8 +17,19 @@ export const setAuthToken = (token: string) => {
   apiClient.defaults.headers.common.Authorization = `Bearer ${token}`;
 };
 
-export const createChatRoom = (houseId: number, participantId: number) => {
-  return apiClient.post('/chatroom', { houseId, participantId });
+export const createChatRoom = async (houseId: number, participantId: number) => {
+  const requestDto: ChatRoomRequestDto = {
+    houseId,
+    participantId,
+  };
+
+  try {
+    const response = await apiClient.post('/chatroom', requestDto);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to create chat room', error);
+    throw error;
+  }
 };
 
 export const getChatRooms = () => {

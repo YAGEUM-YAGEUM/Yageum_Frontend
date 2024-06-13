@@ -10,7 +10,7 @@ class WebSocketService {
   constructor(token: string) {
     this.token = token;
     this.client = new Client({
-      brokerURL: `ws://backend-url/stomp/chat`,
+      brokerURL: `ws://localhost:8080/stomp/chat`,
       connectHeaders: {
         Authorization: `Bearer ${this.token}`,
       },
