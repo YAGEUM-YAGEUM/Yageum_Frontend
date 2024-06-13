@@ -3,6 +3,7 @@
 import { useState, FormEvent } from 'react';
 import styled from 'styled-components';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
+import { tenantRegister, lessorRegister } from '@/api/auth.api';
 
 const Title = styled.h1`
   text-align: center;
@@ -16,11 +17,14 @@ const Form = styled.form`
   width: 100%;
   max-width: 400px;
   margin: auto;
-  gap: 4px;
+  gap: 20px;
 `;
+
 const ContentText = styled.h2`
   font-size: 18px;
+  margin-bottom: 10px;
 `;
+
 const Label = styled.label`
   display: flex;
   align-items: center;
@@ -58,12 +62,26 @@ const PasswordInput = styled.input`
   font-size: 16px;
 `;
 
-const ButtonDiv = styled.div`
-  text-align: center;
+const BtnContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
 `;
 
-const RadioButtonLabel = styled.label`
-  margin: 0 auto;
+const AreaButton = styled.button<{ active: boolean }>`
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background-color: ${({ active }) => (active ? '#007bff' : 'white')};
+  color: ${({ active }) => (active ? 'white' : 'black')};
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0 5px;
+
+  &:hover {
+    background-color: ${({ active }) => (active ? '#0056b3' : '#f0f0f0')};
+  }
 `;
 
 const Button = styled.button`
@@ -90,32 +108,46 @@ const ToggleButton = styled.button`
 
 function Signup() {
   const [email, setEmail] = useState<string>('');
-  const [id, setId] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [name, setName] = useState<string>('');
   const [birthDate, setBirthDate] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
-  const [role, setRole] = useState<string>('');
+  const [role, setRole] = useState<string>('임차인');
   const [interestedRegion, setInterestedRegion] = useState<string>('');
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    // if (password !== confirmPassword) {
-    //   alert('비밀번호가 일치하지 않습니다.');
-    // } else {
-    //   console.log({
-    //     email,
-    //     id,
-    //     password,
-    //     name,
-    //     birthDate,
-    //     phoneNumber,
-    //     role,
-    //     interestedRegion,
-    //   });
-    // }
+    if (password !== confirmPassword) {
+      alert('비밀번호가 일치하지 않습니다.');
+    } else {
+      try {
+        const data = {
+          email,
+          username,
+          password,
+          name,
+          phone: phoneNumber,
+        };
+
+        let response;
+        if (role === '임차인') {
+          response = await tenantRegister(data);
+        } else if (role === '임대인') {
+          response = await lessorRegister(data);
+        }
+
+        if (response && response.success) {
+          alert('회원가입이 성공적으로 완료되었습니다!');
+          // 성공 시 로그인 페이지로 이동 등 추가 처리 필요
+        }
+      } catch (error) {
+        console.error('회원가입 실패:', error);
+        alert('회원가입에 실패했습니다.');
+      }
+    }
   };
 
   return (
@@ -136,8 +168,8 @@ function Signup() {
           <LabelText>아이디</LabelText>
           <Input
             type="text"
-            value={id}
-            onChange={(e) => setId(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
         </Label>
         <Label>
@@ -188,7 +220,25 @@ function Signup() {
             onChange={(e) => setPhoneNumber(e.target.value)}
           />
         </Label>
-        <ContentText>관심 분야</ContentText>
+        <ContentText>가입 정보</ContentText>
+        <Label>
+          <LabelText>이용 분야</LabelText>
+          <BtnContainer>
+            <AreaButton
+              active={role === '임차인'}
+              onClick={() => setRole('임차인')}
+            >
+              임차인
+            </AreaButton>
+            <AreaButton
+              active={role === '임대인'}
+              onClick={() => setRole('임대인')}
+            >
+              임대인
+            </AreaButton>
+          </BtnContainer>
+        </Label>
+
         <Label>
           <LabelText>관심 지역</LabelText>
           <Input
@@ -197,30 +247,6 @@ function Signup() {
             onChange={(e) => setInterestedRegion(e.target.value)}
           />
         </Label>
-        <div>
-          <ButtonDiv>
-            <RadioButtonLabel>
-              <Input
-                type="radio"
-                value="tenant"
-                name="role"
-                checked={role === 'tenant'}
-                onChange={(e) => setRole(e.target.value)}
-              />
-              임차인
-            </RadioButtonLabel>
-            <RadioButtonLabel>
-              <Input
-                type="radio"
-                value="landlord"
-                name="role"
-                checked={role === 'landlord'}
-                onChange={(e) => setRole(e.target.value)}
-              />
-              임대인
-            </RadioButtonLabel>
-          </ButtonDiv>
-        </div>
         <Button type="submit">가입 완료</Button>
       </Form>
     </>
