@@ -140,6 +140,7 @@ function Login() {
       if (response && response.success) {
         alert('로그인에 성공했습니다!');
         const { accessToken } = response.data;
+        localStorage.setItem('accessToken', accessToken);
         setAuthToken(accessToken);
         // 성공 시 메인 페이지로 이동 등 추가 처리
       }
