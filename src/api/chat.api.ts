@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 interface ChatRoomRequestDto {
   houseId: number;
   participantId: number;
@@ -17,7 +16,10 @@ export const setAuthToken = (token: string) => {
   apiClient.defaults.headers.common.Authorization = `Bearer ${token}`;
 };
 
-export const createChatRoom = async (houseId: number, participantId: number) => {
+export const createChatRoom = async (
+  houseId: number,
+  participantId: number,
+) => {
   const requestDto: ChatRoomRequestDto = {
     houseId,
     participantId,
