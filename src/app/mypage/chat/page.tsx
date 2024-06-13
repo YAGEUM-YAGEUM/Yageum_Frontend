@@ -53,10 +53,16 @@ function ChatPage({ token }: { token: string }) {
   const websocketService = useWebSocket();
 
   const fetchChatRooms = () => {
+    setAuthToken(token); // 토큰을 설정
     getChatRooms().then((response) => {
       setChatRooms(response.data);
     });
   };
+
+  useEffect(() => {
+    setAuthToken(token); // 토큰을 설정합
+    fetchChatRooms(); // 초기 로드 시 채팅방 목록 가져오기
+  }, [token]);
 
   useEffect(() => {
     if (websocketService) {
@@ -65,11 +71,6 @@ function ChatPage({ token }: { token: string }) {
       });
     }
   }, [websocketService]);
-
-  useEffect(() => {
-    setAuthToken(token);
-    fetchChatRooms();
-  }, [token]);
 
   const handleRoomSelect = (roomNo: number) => {
     if (websocketService) {
