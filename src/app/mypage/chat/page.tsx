@@ -2,12 +2,17 @@
 
 'use client';
 
+import {
+  getChatRooms,
+  setAuthToken,
+  createChatRoom as createChatRoomApi,
+} from '@/api/chat.api';
+import { useWebSocket } from '@/context/WebSocketContext';
+import CreateChatRoom from '@/components/common/CreateChatRoom';
+
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import ChatButton from '@/components/common/ChatButton';
-import { getChatRooms, setAuthToken } from '@/api/chat.api';
-import CreateChatRoom from '@/components/common/CreateChatRoom';
-import { useWebSocket } from '@/context/WebSocketContext';
 
 const Container = styled.div`
   display: flex;
@@ -52,15 +57,18 @@ function ChatPage({ token }: { token: string }) {
   const [selectedRoomNo, setSelectedRoomNo] = useState<number | null>(null);
   const websocketService = useWebSocket();
 
-  const fetchChatRooms = () => {
+  const fetchChatRooms = async () => {
     setAuthToken(token); // 토큰을 설정
-    getChatRooms().then((response) => {
+    try {
+      const response = await getChatRooms();
       setChatRooms(response.data);
-    });
+    } catch (error) {
+      console.error('Error fetching chat rooms:', error);
+    }
   };
 
   useEffect(() => {
-    setAuthToken(token); // 토큰을 설정합
+    setAuthToken(token); // 토큰을 설정합니다.
     fetchChatRooms(); // 초기 로드 시 채팅방 목록 가져오기
   }, [token]);
 
@@ -81,10 +89,22 @@ function ChatPage({ token }: { token: string }) {
     }
   };
 
+  const handleCreateChatRoom = async (
+    houseId: number,
+    participantId: number,
+  ) => {
+    try {
+      await createChatRoomApi(houseId, participantId);
+      fetchChatRooms(); // 새로운 채팅방 생성 후 목록 갱신
+    } catch (error) {
+      console.error('Failed to create chat room:', error);
+    }
+  };
+
   return (
     <Container>
       <h1>마이페이지</h1>
-      <CreateChatRoom onCreate={fetchChatRooms} />
+      <CreateChatRoom onCreate={handleCreateChatRoom} />
       <Content>
         <Table>
           <Thead>

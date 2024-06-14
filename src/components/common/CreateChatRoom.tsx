@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { createChatRoom } from '@/api/chat.api';
 
-function CreateChatRoom({ onCreate }: { onCreate: () => void }) {
+function CreateChatRoom({
+  onCreate,
+}: {
+  onCreate: (houseId: number, participantId: number) => void;
+}) {
   const [houseId, setHouseId] = useState<number>(0);
   const [participantId, setParticipantId] = useState<number>(0);
   const [message, setMessage] = useState<string>('');
@@ -9,10 +12,8 @@ function CreateChatRoom({ onCreate }: { onCreate: () => void }) {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     try {
-      const response = await createChatRoom(houseId, participantId);
-      console.log(response.data); // API 응답 데이터 출력
+      await onCreate(houseId, participantId);
       setMessage('채팅방 생성되었습니다.');
-      onCreate(); // 새로운 채팅방 생성 후 목록 갱신
     } catch (error) {
       setMessage('Error creating chat room.');
     }
