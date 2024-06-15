@@ -29,6 +29,7 @@ const CanvasWrapper = styled.div`
   width: 600px;
   height: 300px;
   border-radius: 10px;
+  position: relative;
 `;
 // const Signaturecanvas = styled(SignatureCanvas)`
 //   width: 80%;
@@ -59,6 +60,7 @@ function SignatureModal() {
   const [isSigned, setIsSigned] = useState<boolean>(false);
   const clear = () => {
     sigCanvas.current?.clear();
+    setIsSigned(false);
   };
 
   const save = () => {
@@ -74,7 +76,6 @@ function SignatureModal() {
   return (
     <Modal>
       <Wrapper>
-        {!isSigned && <CPlaceHolder>서명해주세요</CPlaceHolder>}
         <Spacer size={60} />
 
         <Title>서명하기</Title>
@@ -84,6 +85,7 @@ function SignatureModal() {
         <Spacer size={30} />
 
         <CanvasWrapper>
+          {!isSigned && <CPlaceHolder>서명해주세요</CPlaceHolder>}
           <SignatureCanvas
             ref={sigCanvas}
             canvasProps={{
