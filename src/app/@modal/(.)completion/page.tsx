@@ -6,7 +6,7 @@ import useWeb3 from '@/hooks/contract/useWeb3';
 import Web3 from 'web3'; // Web3를 가져와 사용
 
 function CompletionModal() {
-  const [web3, web3Account] = useWeb3();
+  const [web3, web3Account, contract] = useWeb3();
   const [account, setAccount] = useState<any>();
   const [isLoading, setIsLoading] = useState(true);
   const [signature, setSignature] = useState<string | null>(null);
@@ -17,6 +17,7 @@ function CompletionModal() {
       setAccount(web3Account);
       setIsLoading(false);
     }
+    console.log(contract, '스마트컨트랙트 연동');
   }, [web3Account]);
 
   useEffect(() => {

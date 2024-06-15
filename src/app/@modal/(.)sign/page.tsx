@@ -6,6 +6,7 @@ import SignatureCanvas from 'react-signature-canvas';
 import styled from 'styled-components';
 import Spacer from '@/components/common/Spacer';
 import Button from '@/components/common/Button';
+import Link from 'next/link';
 
 const Wrapper = styled.div`
   display: flex;
@@ -53,6 +54,7 @@ const CPlaceHolder = styled.div`
   letter-spacing: 0.5px;
 `;
 function SignatureModal() {
+  console.log(localStorage.getItem('contractFormData'), '사인페이지입니다~~~~');
   const sigCanvas = useRef<SignatureCanvas | null>(null);
   const [isSigned, setIsSigned] = useState<boolean>(false);
   const clear = () => {
@@ -64,8 +66,8 @@ function SignatureModal() {
       const dataUrl = sigCanvas.current
         .getTrimmedCanvas()
         .toDataURL('image/png');
+
       console.log(dataUrl);
-      // const signatureHash = web3.utils.sha3(dataUrl);
     }
   };
 
@@ -115,7 +117,9 @@ function SignatureModal() {
           <CanvasButton onClick={save}>저장하기/(임시)보내기</CanvasButton>
         </CanvasButtonWrapper>
         <Spacer size={20} />
-        <Button width={110}>계약서 완성하기</Button>
+        <Link href="/completion">
+          <Button width={110}>계약서 완성하기</Button>
+        </Link>
       </Wrapper>
     </Modal>
   );

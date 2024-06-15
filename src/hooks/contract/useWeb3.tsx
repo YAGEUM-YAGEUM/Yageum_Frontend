@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
-import Web3 from 'web3';
-// import Web3, { Contract, AbiItem, ContractAbi } from 'web3';
-// import { CONTRACT_ADDRESS, CONTRACT_ABI } from '@/config';
+import Web3, { Contract, ContractAbi } from 'web3';
+import { CONTRACT_ADDRESS, CONTRACT_ABI } from '@/config';
 
 const useWeb3 = () => {
   const [account, setAccount] = useState<string | undefined>(undefined);
   const [web3, setWeb3] = useState<Web3 | undefined>(undefined);
-  // const [contract, setContract] = useState<Contract<ContractAbi> | undefined>(
-  // undefined,
-  // );
+  const [contract, setContract] = useState<Contract<ContractAbi> | undefined>(
+    undefined,
+  );
 
   // 프로미스 객체를 반환하므로 async-await
   const getChainId = async () => {
@@ -55,11 +54,11 @@ const useWeb3 = () => {
         setWeb3(newWeb3);
         setAccount(resultAccount);
 
-        // const RealEstateContract = new web3.eth.Contract(
-        //   CONTRACT_ABI,
-        //   CONTRACT_ADDRESS,
-        // );
-        // setContract(RealEstateContract);
+        const RealEstateContract = new newWeb3.eth.Contract(
+          CONTRACT_ABI,
+          CONTRACT_ADDRESS,
+        );
+        setContract(RealEstateContract);
       } catch (e) {
         //    console.error(e.message);
         console.error('에러');
@@ -69,14 +68,13 @@ const useWeb3 = () => {
     if (typeof window.ethereum !== 'undefined') {
       console.log('installed');
       init();
-      // console.log(contract, '흑흑 ..');
     } else {
       // 설치 안 된사람에게 실행할 부분
       console.log('원활한 계약을 위해 metamask를 설치를 해주십시오.');
     }
   }, []);
 
-  return [web3, account];
+  return [web3, account, contract];
 };
 
 export default useWeb3;
