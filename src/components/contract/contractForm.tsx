@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
-// import useWeb3 from '@/hooks/contract/useWeb3';
+import useWeb3 from '@/hooks/contract/useWeb3';
 import { useRouter } from 'next/navigation';
 import Button from '../common/Button';
 
@@ -92,13 +92,13 @@ interface FormData {
 
 function ContractForm() {
   const router = useRouter();
-  // const account = useWeb3();
+  const [web3, account] = useWeb3();
   const { register, handleSubmit, setValue, watch } = useForm<FormData>();
   const formValues = watch();
 
   useEffect(() => {
     console.log(localStorage.getItem('contractFormData'));
-
+    console.log(web3, account);
     console.log('Component mounted or setValue changed');
     // const storedFormData = typeof window !== 'undefined' ? localStorage.getItem('storedFormData') : null;
 
@@ -265,6 +265,7 @@ function ContractForm() {
         </Button>
         {/* </Link> */}
       </ContractBody>
+      메타마스크 로그인도 해주시~
     </FormContainer>
   );
 }

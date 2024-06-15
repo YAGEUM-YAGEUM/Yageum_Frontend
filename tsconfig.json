@@ -27,7 +27,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/components/button.ysx",
-    "src/hooks/contract"
+    "src/hooks/contract",
+    "src/web3.test.js"
   ],
   "exclude": ["node_modules"]
 }

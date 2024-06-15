@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react';
+import Web3 from 'web3';
+// import Web3, { Contract, AbiItem, ContractAbi } from 'web3';
+// import { CONTRACT_ADDRESS, CONTRACT_ABI } from '@/config';
 
 const useWeb3 = () => {
-  const [account, setAccount] = useState(null);
+  const [account, setAccount] = useState<string | undefined>(undefined);
+  const [web3, setWeb3] = useState<Web3 | undefined>(undefined);
+  // const [contract, setContract] = useState<Contract<ContractAbi> | undefined>(
+  // undefined,
+  // );
 
   // 프로미스 객체를 반환하므로 async-await
   const getChainId = async () => {
@@ -14,8 +21,9 @@ const useWeb3 = () => {
     const acc = await window.ethereum.request({
       method: 'eth_requestAccounts',
     });
-    return acc;
+    return acc; // 메타마스크 계정 연결 popup 뜨고, account 리턴
   };
+
   const addNetwork = async (chainId: string) => {
     const network = {
       chainId,
@@ -34,7 +42,6 @@ const useWeb3 = () => {
   };
 
   useEffect(() => {
-    console.log('들어왔오 useEffect랍니다 ~~~');
     const init = async () => {
       try {
         const targetChainId = '0x18db'; // 16진수로
@@ -43,8 +50,16 @@ const useWeb3 = () => {
         if (targetChainId !== chainId) {
           addNetwork(targetChainId);
         }
-        const [resultAccount] = await getReqAccounts(); // 결과물이 배열로 떨어져서 구조분해할당
+        const [resultAccount] = await getReqAccounts(); // 배열 구조분해할당
+        const newWeb3 = new Web3(window.ethereum);
+        setWeb3(newWeb3);
         setAccount(resultAccount);
+
+        // const RealEstateContract = new web3.eth.Contract(
+        //   CONTRACT_ABI,
+        //   CONTRACT_ADDRESS,
+        // );
+        // setContract(RealEstateContract);
       } catch (e) {
         //    console.error(e.message);
         console.error('에러');
@@ -54,13 +69,14 @@ const useWeb3 = () => {
     if (typeof window.ethereum !== 'undefined') {
       console.log('installed');
       init();
+      // console.log(contract, '흑흑 ..');
     } else {
       // 설치 안 된사람에게 실행할 부분
-      console.log('어??');
+      console.log('원활한 계약을 위해 metamask를 설치를 해주십시오.');
     }
   }, []);
 
-  return [account];
+  return [web3, account];
 };
 
 export default useWeb3;

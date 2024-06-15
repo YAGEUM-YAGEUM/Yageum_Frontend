@@ -3,8 +3,9 @@ import styled from 'styled-components';
 interface ButtonProps {
   width: number;
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-  children: string;
+  children: any;
   type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
 }
 const ButtonWrapper = styled.div<ButtonProps>`
   height: 35px;
@@ -21,9 +22,14 @@ const ButtonWrapper = styled.div<ButtonProps>`
   font-size: 12px;
   letter-spacing: 0.5px;
 `;
-function Button({ width, onClick, type, children }: ButtonProps) {
+function Button({ width, onClick, type, children, disabled }: ButtonProps) {
   return (
-    <ButtonWrapper width={width} onClick={onClick} type={type}>
+    <ButtonWrapper
+      width={width}
+      onClick={onClick}
+      type={type}
+      disabled={disabled}
+    >
       {children}
     </ButtonWrapper>
   );
