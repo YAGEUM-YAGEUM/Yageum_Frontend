@@ -68,7 +68,7 @@ function ChatPage({ token }: { token: string }) {
   };
 
   useEffect(() => {
-    setAuthToken(token); // 토큰을 설정합니다.
+    setAuthToken(token); // 토큰 설정
     fetchChatRooms(); // 초기 로드 시 채팅방 목록 가져오기
   }, [token]);
 
@@ -116,25 +116,26 @@ function ChatPage({ token }: { token: string }) {
             </Tr>
           </Thead>
           <tbody>
-            {chatRooms.map((room, index) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <Tr key={index}>
-                <Td>
-                  {room.creatorId} | {room.participantId}
-                </Td>
-                <Td>{room.houseId}</Td>
-                <Td>
-                  <button onClick={() => handleRoomSelect(room.chatRoomNo)}>
-                    입장
-                  </button>
-                </Td>
-                <Td>
-                  {selectedRoomNo === room.chatRoomNo && (
-                    <ChatButton roomNo={room.chatRoomNo} />
-                  )}
-                </Td>
-              </Tr>
-            ))}
+            {Array.isArray(chatRooms) &&
+              chatRooms.map((room, index) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <Tr key={index}>
+                  <Td>
+                    {room.creatorId} | {room.participantId}
+                  </Td>
+                  <Td>{room.houseId}</Td>
+                  <Td>
+                    <button onClick={() => handleRoomSelect(room.chatRoomNo)}>
+                      입장
+                    </button>
+                  </Td>
+                  <Td>
+                    {selectedRoomNo === room.chatRoomNo && (
+                      <ChatButton roomNo={room.chatRoomNo} />
+                    )}
+                  </Td>
+                </Tr>
+              ))}
           </tbody>
         </Table>
       </Content>
