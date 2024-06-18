@@ -116,7 +116,7 @@ function ChatPage({ token }: { token: string }) {
             </Tr>
           </Thead>
           <tbody>
-            {Array.isArray(chatRooms) &&
+            {Array.isArray(chatRooms) && chatRooms.length > 0 ? (
               chatRooms.map((room, index) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <Tr key={index}>
@@ -135,7 +135,12 @@ function ChatPage({ token }: { token: string }) {
                     )}
                   </Td>
                 </Tr>
-              ))}
+              ))
+            ) : (
+              <Tr>
+                <Td colSpan={4}>채팅방이 없습니다.</Td>
+              </Tr>
+            )}
           </tbody>
         </Table>
       </Content>
