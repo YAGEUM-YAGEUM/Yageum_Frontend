@@ -15,6 +15,7 @@ export const useWebSocket = () => {
 export function WebSocketProvider({ token, children }: WebSocketProviderProps) {
   const websocketService = useMemo(() => {
     if (token) {
+      console.log('토큰으로 WebSocketService 초기화:', token); // 추가 로그
       return new WebSocketService(token);
     }
     return null;

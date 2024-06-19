@@ -2,16 +2,15 @@
 
 'use client';
 
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { useWebSocket } from '@/context/WebSocketContext';
 import {
   getChatRooms,
   setAuthToken,
   createChatRoom as createChatRoomApi,
 } from '@/api/chat.api';
-import { useWebSocket } from '@/context/WebSocketContext';
 import CreateChatRoom from '@/components/common/CreateChatRoom';
-
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import ChatButton from '@/components/common/ChatButton';
 
 const Container = styled.div`
@@ -79,6 +78,7 @@ function ChatPage({ token }: { token: string }) {
 
   useEffect(() => {
     if (websocketService) {
+      console.log('WebSocket 서비스에 연결 중'); // 추가 로그
       websocketService.connect(() => {
         fetchChatRooms();
       });
@@ -87,8 +87,9 @@ function ChatPage({ token }: { token: string }) {
 
   const handleRoomSelect = (roomNo: number) => {
     if (websocketService) {
+      console.log(`채팅방 ${roomNo} 구독 중`); // 추가 로그
       websocketService.subscribe(roomNo.toString(), (message: any) => {
-        console.log('Received message:', message);
+        console.log('수신한 메시지:', message);
       });
       setSelectedRoomNo(roomNo);
     }
@@ -102,7 +103,7 @@ function ChatPage({ token }: { token: string }) {
       await createChatRoomApi(houseId, participantId);
       fetchChatRooms(); // 새로운 채팅방 생성 후 목록 갱신
     } catch (error) {
-      console.error('Failed to create chat room:', error);
+      console.error('채팅방 생성 실패:', error);
     }
   };
 
