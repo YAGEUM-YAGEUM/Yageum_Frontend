@@ -24,14 +24,14 @@ class WebSocketService {
   }
 
   connect(onConnect: () => void) {
-    console.log('토큰으로 연결 시도 중:', this.token); // 추가 로그
+    console.log('토큰으로 연결 시도 중:', this.token);
     this.client.onConnect = () => {
       console.log('WebSocket 연결 성공');
       onConnect();
     };
 
     this.client.onStompError = (frame: IFrame) => {
-      console.error(`브로커에서 오류: ${frame.headers.message}`);
+      console.error(`브로커에서 오류 보고: ${frame.headers.message}`);
       console.error(`추가 정보: ${frame.body}`);
     };
 
@@ -39,23 +39,31 @@ class WebSocketService {
   }
 
   subscribe(chatRoomId: string, onMessage: (message: any) => void) {
-    console.log('채팅방 구독 시도 중, 토큰:', this.token); // 추가 로그
-    this.subscription = this.client.subscribe(
-      `/sub/chat/room/${chatRoomId}`,
-      (message) => {
-        onMessage(JSON.parse(message.body));
-      },
-      { Authorization: `Bearer ${this.token}` },
-    );
+    if (this.client.connected) {
+      console.log('채팅방 구독 시도 중, 토큰:', this.token);
+      this.subscription = this.client.subscribe(
+        `/sub/chat/room/${chatRoomId}`,
+        (message) => {
+          onMessage(JSON.parse(message.body));
+        },
+        { Authorization: `Bearer ${this.token}` },
+      );
+    } else {
+      console.error('WebSocket이 연결되지 않았습니다.');
+    }
   }
 
   sendMessage(destination: string, message: any) {
-    console.log('메시지 전송 시도 중, 토큰:', this.token); // 추가 로그
-    this.client.publish({
-      destination,
-      body: JSON.stringify(message),
-      headers: { Authorization: `Bearer ${this.token}` },
-    });
+    if (this.client.connected) {
+      console.log('메시지 전송 시도 중, 토큰:', this.token);
+      this.client.publish({
+        destination,
+        body: JSON.stringify(message),
+        headers: { Authorization: `Bearer ${this.token}` },
+      });
+    } else {
+      console.error('WebSocket이 연결되지 않았습니다.');
+    }
   }
 
   disconnect() {

@@ -87,11 +87,14 @@ function ChatPage({ token }: { token: string }) {
 
   const handleRoomSelect = (roomNo: number) => {
     if (websocketService) {
-      console.log(`채팅방 ${roomNo} 구독 중`); // 추가 로그
-      websocketService.subscribe(roomNo.toString(), (message: any) => {
-        console.log('수신한 메시지:', message);
+      console.log(`채팅방 ${roomNo} 구독 중`);
+      websocketService.connect(() => {
+        // onConnect 내부에서 구독을 수행
+        websocketService.subscribe(roomNo.toString(), (message: any) => {
+          console.log('수신한 메시지:', message);
+        });
+        setSelectedRoomNo(roomNo);
       });
-      setSelectedRoomNo(roomNo);
     }
   };
 
