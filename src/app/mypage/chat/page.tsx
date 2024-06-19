@@ -51,25 +51,31 @@ const Td = styled.td`
   padding: 10px;
   border-bottom: 1px solid #ccc;
 `;
-const tokens =
-  'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoaWhpaGkyIiwidWlkIjoxLCJuYW1lIjoi7JW86riI7JW86riIMiIsImlhdCI6MTcxODc1NjUwNiwiZXhwIjoxNzE4NzU4MzA2fQ.CthMj0NyI1nXCibq3Xix_8Z6rYAiqov5Fke3ZvUmJWM';
 
-function ChatPage() {
+function ChatPage({ token }: { token: string }) {
   const [chatRooms, setChatRooms] = useState<any[]>([]);
   const [selectedRoomNo, setSelectedRoomNo] = useState<number | null>(null);
   const websocketService = useWebSocket();
 
-  const fetchChatRooms = () => {
-    setAuthToken(tokens); // 토큰을 설정
-    getChatRooms().then((response) => {
-      setChatRooms(response.data);
-    });
+  const fetchChatRooms = async () => {
+    setAuthToken(token); // 토큰을 설정
+    try {
+      const response = await getChatRooms();
+      if (response.data && response.data.list) {
+        setChatRooms(response.data.list); // 데이터를 올바르게 설정
+      } else {
+        setChatRooms([]);
+      }
+    } catch (error) {
+      console.error('에러 :', error);
+      setChatRooms([]); // 에러 발생 시 빈 배열로 설정
+    }
   };
 
   useEffect(() => {
-    setAuthToken(tokens); // 토큰을 설정합
+    setAuthToken(token); // 토큰을 설정
     fetchChatRooms(); // 초기 로드 시 채팅방 목록 가져오기
-  }, [tokens]);
+  }, [token]);
 
   useEffect(() => {
     if (websocketService) {
