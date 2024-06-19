@@ -35,7 +35,7 @@ export const createChatRoom = async (
 };
 
 export const getChatRooms = () => {
-  return apiClient.get('/chatroom');
+  return apiClient.get('/chatrooms');
 };
 
 export const getChatHistory = (roomNo: number) => {

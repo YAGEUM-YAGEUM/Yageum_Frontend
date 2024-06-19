@@ -51,7 +51,8 @@ const Td = styled.td`
   padding: 10px;
   border-bottom: 1px solid #ccc;
 `;
-const tokens = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoaWhpaGkyIiwidWlkIjoxLCJuYW1lIjoi7JW86riI7JW86riIMiIsImlhdCI6MTcxODc1NjUwNiwiZXhwIjoxNzE4NzU4MzA2fQ.CthMj0NyI1nXCibq3Xix_8Z6rYAiqov5Fke3ZvUmJWM';
+const tokens =
+  'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoaWhpaGkyIiwidWlkIjoxLCJuYW1lIjoi7JW86riI7JW86riIMiIsImlhdCI6MTcxODc1NjUwNiwiZXhwIjoxNzE4NzU4MzA2fQ.CthMj0NyI1nXCibq3Xix_8Z6rYAiqov5Fke3ZvUmJWM';
 
 function ChatPage() {
   const [chatRooms, setChatRooms] = useState<any[]>([]);
@@ -65,12 +66,10 @@ function ChatPage() {
     });
   };
 
-
   useEffect(() => {
     setAuthToken(tokens); // 토큰을 설정합
     fetchChatRooms(); // 초기 로드 시 채팅방 목록 가져오기
   }, [tokens]);
-
 
   useEffect(() => {
     if (websocketService) {
