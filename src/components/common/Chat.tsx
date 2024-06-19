@@ -132,10 +132,14 @@ function Chat({ roomNo }: ChatProps) {
     <ChatContainer>
       <Header>Chat Room {roomNo}</Header>
       <MessagesContainer>
-        {messages.map((msg, index) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <Message key={index}>{msg.content}</Message>
-        ))}
+        {Array.isArray(messages) && messages.length > 0 ? (
+          messages.map((msg, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <Message key={index}>{msg.content}</Message>
+          ))
+        ) : (
+          <Message>대화가 없습니다.</Message>
+        )}
       </MessagesContainer>
       <InputContainer>
         <Input

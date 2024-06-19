@@ -43,6 +43,7 @@ class WebSocketService {
       (message) => {
         onMessage(JSON.parse(message.body));
       },
+      { Authorization: `Bearer ${this.token}` },
     );
   }
 
@@ -50,6 +51,7 @@ class WebSocketService {
     this.client.publish({
       destination,
       body: JSON.stringify(message),
+      headers: { Authorization: `Bearer ${this.token}` },
     });
   }
 
