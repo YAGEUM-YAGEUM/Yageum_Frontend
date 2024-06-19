@@ -51,26 +51,26 @@ const Td = styled.td`
   padding: 10px;
   border-bottom: 1px solid #ccc;
 `;
+const tokens = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoaWhpaGkyIiwidWlkIjoxLCJuYW1lIjoi7JW86riI7JW86riIMiIsImlhdCI6MTcxODc1NjUwNiwiZXhwIjoxNzE4NzU4MzA2fQ.CthMj0NyI1nXCibq3Xix_8Z6rYAiqov5Fke3ZvUmJWM';
 
-function ChatPage({ token }: { token: string }) {
+function ChatPage() {
   const [chatRooms, setChatRooms] = useState<any[]>([]);
   const [selectedRoomNo, setSelectedRoomNo] = useState<number | null>(null);
   const websocketService = useWebSocket();
 
-  const fetchChatRooms = async () => {
-    setAuthToken(token); // 토큰을 설정
-    try {
-      const response = await getChatRooms();
+  const fetchChatRooms = () => {
+    setAuthToken(tokens); // 토큰을 설정
+    getChatRooms().then((response) => {
       setChatRooms(response.data);
-    } catch (error) {
-      console.error('Error fetching chat rooms:', error);
-    }
+    });
   };
 
+
   useEffect(() => {
-    setAuthToken(token); // 토큰 설정
+    setAuthToken(tokens); // 토큰을 설정합
     fetchChatRooms(); // 초기 로드 시 채팅방 목록 가져오기
-  }, [token]);
+  }, [tokens]);
+
 
   useEffect(() => {
     if (websocketService) {
