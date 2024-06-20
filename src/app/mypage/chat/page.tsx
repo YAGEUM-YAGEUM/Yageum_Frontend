@@ -11,7 +11,8 @@ import {
   createChatRoom as createChatRoomApi,
 } from '@/api/chat.api';
 import CreateChatRoom from '@/components/common/CreateChatRoom';
-import ChatButton from '@/components/common/ChatButton';
+import ChatModal from '@/components/common/ChatModal';
+import Chat from '@/components/common/Chat';
 
 const Container = styled.div`
   display: flex;
@@ -54,6 +55,7 @@ const Td = styled.td`
 function ChatPage({ token }: { token: string }) {
   const [chatRooms, setChatRooms] = useState<any[]>([]);
   const [selectedRoomNo, setSelectedRoomNo] = useState<number | null>(null);
+  const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
   const websocketService = useWebSocket();
 
   const fetchChatRooms = async () => {
@@ -94,6 +96,7 @@ function ChatPage({ token }: { token: string }) {
           console.log('수신한 메시지:', message);
         });
         setSelectedRoomNo(roomNo);
+        setIsChatOpen(true); // 채팅 UI 열기
       });
     }
   };
@@ -108,6 +111,10 @@ function ChatPage({ token }: { token: string }) {
     } catch (error) {
       console.error('채팅방 생성 실패:', error);
     }
+  };
+
+  const closeModal = () => {
+    setIsChatOpen(false);
   };
 
   return (
@@ -138,11 +145,6 @@ function ChatPage({ token }: { token: string }) {
                       입장
                     </button>
                   </Td>
-                  <Td>
-                    {selectedRoomNo === room.chatRoomNo && (
-                      <ChatButton roomNo={room.chatRoomNo} />
-                    )}
-                  </Td>
                 </Tr>
               ))
             ) : (
@@ -152,6 +154,11 @@ function ChatPage({ token }: { token: string }) {
             )}
           </tbody>
         </Table>
+        {selectedRoomNo !== null && isChatOpen && (
+          <ChatModal onClose={closeModal}>
+            <Chat roomNo={selectedRoomNo} />
+          </ChatModal>
+        )}
       </Content>
     </Container>
   );
