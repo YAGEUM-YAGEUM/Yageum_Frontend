@@ -1,7 +1,7 @@
 import { Client, StompSubscription, IFrame } from '@stomp/stompjs';
 
 class WebSocketService {
-  private client: Client;
+  public client: Client;
 
   private subscription: StompSubscription | null = null;
 
@@ -25,6 +25,12 @@ class WebSocketService {
 
   connect(onConnect: () => void) {
     console.log('토큰으로 연결 시도 중:', this.token);
+    if (this.client.active) {
+      console.log('WebSocket 이미 활성화됨, 재연결 시도 무시');
+      onConnect();
+      return;
+    }
+
     this.client.onConnect = () => {
       console.log('WebSocket 연결 성공');
       onConnect();

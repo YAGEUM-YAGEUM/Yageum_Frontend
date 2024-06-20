@@ -63,7 +63,6 @@ function ChatModal({ children, onClose }: ChatModalProps) {
     // 모달 외부
     <ModalOuterWrapper onMouseUp={(e) => handleClickClose(e)}>
       {/* // 모달 내부 */}
-
       <ModalInnerWrapper
         onMouseDown={(e) => handleMouseDown(e)}
         onMouseUp={(e) => handleMouseUp(e)}
