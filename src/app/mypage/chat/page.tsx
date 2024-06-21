@@ -82,7 +82,6 @@ function ChatPage({ token }: { token: string }) {
     if (websocketService) {
       console.log('WebSocket 서비스에 연결 중'); // 추가 로그
       websocketService.connect(() => {
-        console.log('WebSocket 연결 성공');
         fetchChatRooms();
       });
     }
@@ -91,24 +90,14 @@ function ChatPage({ token }: { token: string }) {
   const handleRoomSelect = (roomNo: number) => {
     if (websocketService) {
       console.log(`채팅방 ${roomNo} 구독 중`);
-      if (!websocketService.client.connected) {
-        websocketService.connect(() => {
-          console.log('WebSocket 재연결 및 구독 중');
-          websocketService.subscribe(roomNo.toString(), (message: any) => {
-            console.log('수신한 메시지:', message);
-          });
-          setSelectedRoomNo(roomNo);
-          setIsChatOpen(true); // 채팅 UI 열기
-        });
-      } else {
+      websocketService.connect(() => {
+        // onConnect 내부에서 구독을 수행
         websocketService.subscribe(roomNo.toString(), (message: any) => {
           console.log('수신한 메시지:', message);
         });
         setSelectedRoomNo(roomNo);
         setIsChatOpen(true); // 채팅 UI 열기
-      }
-    } else {
-      console.error('WebSocket 서비스가 초기화되지 않았습니다.');
+      });
     }
   };
 
