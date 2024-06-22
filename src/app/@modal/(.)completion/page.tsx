@@ -4,6 +4,7 @@ import Modal from '@/components/common/Modal';
 import { useEffect, useState } from 'react';
 import useWeb3 from '@/hooks/contract/useWeb3';
 import Web3 from 'web3'; // Web3를 가져와 사용
+import { Contract } from 'web3-eth-contract';
 
 function CompletionModal() {
   const [web3, web3Account, contract] = useWeb3();
@@ -17,22 +18,31 @@ function CompletionModal() {
       setAccount(web3Account);
       setIsLoading(false);
     }
-    console.log(contract, '스마트컨트랙트 연동');
   }, [web3Account]);
 
   useEffect(() => {
+    const sendTransaction = async () => {
+      if (contract instanceof Contract) {
+        console.log('Contract address:', contract.options.address);
+        contract.methods.sendContract(); // Abi 값
+      } else {
+        console.log('Contract 가 없습니다..');
+      }
+    };
     const signMessage = async () => {
       if (web3 instanceof Web3 && account) {
-        const message = '계약을 완료하기 위해 전자 서명을 해주세요. ';
+        const message = '부동산 계약을 완료하기 위해 전자 서명을 해주세요. ';
         try {
           const eSignature = await web3.eth.personal.sign(message, account, '');
           setSignature(eSignature);
-          console.log('서명 완료:', signature);
+          console.log('전자서명 서명 완료:', eSignature);
+          sendTransaction();
         } catch (error) {
           console.error('서명 실패:', error);
         }
       }
     };
+
     if (account) {
       signMessage();
     }

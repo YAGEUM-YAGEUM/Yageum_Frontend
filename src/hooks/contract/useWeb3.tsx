@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import Web3, { Contract, ContractAbi } from 'web3';
+import Web3, { ContractAbi } from 'web3';
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from '@/config';
+import { Contract } from 'web3-eth-contract';
 
+// type ContractAbi = any;
 const useWeb3 = () => {
   const [account, setAccount] = useState<string | undefined>(undefined);
   const [web3, setWeb3] = useState<Web3 | undefined>(undefined);
@@ -54,26 +56,26 @@ const useWeb3 = () => {
         setWeb3(newWeb3);
         setAccount(resultAccount);
 
+        // contract 연결
+
         const RealEstateContract = new newWeb3.eth.Contract(
           CONTRACT_ABI,
           CONTRACT_ADDRESS,
         );
         setContract(RealEstateContract);
-      } catch (e) {
-        //    console.error(e.message);
-        console.error('에러');
+      } catch (e: any) {
+        console.error(e.message);
       }
     };
     // 메타마스크가 설치되있다면,
     if (typeof window.ethereum !== 'undefined') {
-      console.log('installed');
+      console.log('metaMask가 설치되어있습니다. ');
       init();
     } else {
       // 설치 안 된사람에게 실행할 부분
-      console.log('원활한 계약을 위해 metamask를 설치를 해주십시오.');
+      alert('원활한 계약을 위해 metamask를 설치해주십시오.');
     }
   }, []);
-
   return [web3, account, contract];
 };
 

@@ -1,12 +1,12 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import Modal from '@/components/common/Modal';
 import SignatureCanvas from 'react-signature-canvas';
 import styled from 'styled-components';
 import Spacer from '@/components/common/Spacer';
 import Button from '@/components/common/Button';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const Wrapper = styled.div`
   display: flex;
@@ -24,16 +24,12 @@ const Line = styled.hr`
   width: 600px;
 `;
 const CanvasWrapper = styled.div`
-  /* border: 1px solid #848484; */
   background-color: black;
   width: 600px;
   height: 300px;
   border-radius: 10px;
   position: relative;
 `;
-// const Signaturecanvas = styled(SignatureCanvas)`
-//   width: 80%;
-// `;
 const CanvasButtonWrapper = styled.div`
   display: flex;
   flex-direction: row;
@@ -58,18 +54,38 @@ function SignatureModal() {
   console.log(localStorage.getItem('contractFormData'), '사인페이지입니다~~~~');
   const sigCanvas = useRef<SignatureCanvas | null>(null);
   const [isSigned, setIsSigned] = useState<boolean>(false);
+  const [dataUrl, setDataUrl] = useState<string>('');
+  const router = useRouter();
+
   const clear = () => {
     sigCanvas.current?.clear();
     setIsSigned(false);
   };
+  const submit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (sigCanvas.current) {
+      const signature = sigCanvas.current
+        .getTrimmedCanvas()
+        .toDataURL('image/png');
+      setDataUrl(signature);
+    }
+  };
+  useEffect(() => {
+    if (dataUrl) {
+      // dataUrl도 따로 localStorage에 저장!
+      localStorage.setItem('lessorSignaturePad', dataUrl);
+      router.push('/completion');
+    }
+  }, [dataUrl, router]);
 
   const save = () => {
     if (sigCanvas.current) {
-      const dataUrl = sigCanvas.current
+      const savedDataUrl = sigCanvas.current
         .getTrimmedCanvas()
         .toDataURL('image/png');
+      // 파일로 저장하는 거 찾아보기
 
-      console.log(dataUrl);
+      console.log(savedDataUrl);
     }
   };
 
@@ -116,12 +132,12 @@ function SignatureModal() {
           >
             지우기
           </CanvasButton>
-          <CanvasButton onClick={save}>저장하기/(임시)보내기</CanvasButton>
+          <CanvasButton onClick={save}>사인 저장하기</CanvasButton>
         </CanvasButtonWrapper>
         <Spacer size={20} />
-        <Link href="/completion">
-          <Button width={110}>계약서 완성하기</Button>
-        </Link>
+        <Button width={110} onClick={submit}>
+          완성하기
+        </Button>
       </Wrapper>
     </Modal>
   );

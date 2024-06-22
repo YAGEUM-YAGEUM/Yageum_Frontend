@@ -92,28 +92,25 @@ interface FormData {
 
 function ContractForm() {
   const router = useRouter();
-  const [web3, account] = useWeb3();
+  const [web3] = useWeb3();
   const { register, handleSubmit, setValue, watch } = useForm<FormData>();
   const formValues = watch();
 
   useEffect(() => {
-    console.log(localStorage.getItem('contractFormData'));
-    console.log(web3, account);
-    console.log('Component mounted or setValue changed');
     // const storedFormData = typeof window !== 'undefined' ? localStorage.getItem('storedFormData') : null;
 
+    // 다시 돌아왔을 때 localstorage에 내용 있으면 form 에 넣어서 보여주기
     const storedFormData = localStorage.getItem('contractFormData');
     if (storedFormData) {
       const parsedFormData = JSON.parse(storedFormData);
-      console.log(parsedFormData, '이랍니다');
+      console.log(parsedFormData, '기존에 있던 내용입니다 ');
       Object.keys(parsedFormData).forEach((key) => {
         setValue(key as keyof FormData, parsedFormData[key]);
       });
     }
-  }, [setValue]);
+  }, [setValue, web3]);
 
   const toSign = () => {
-    // console.log(data);
     const formData = JSON.stringify(formValues);
     localStorage.setItem('contractFormData', formData);
     router.push('/sign');
@@ -123,12 +120,6 @@ function ContractForm() {
     console.log(data);
   };
 
-  // const checkAccount = () => {
-  //   console.log('check!');
-  //   if (account) console.log('잇대', account);
-  //   else {
-  //     console.log('없댕 ', { account });
-  //   }
   // };
   return (
     <FormContainer onSubmit={handleSubmit(onSubmit)}>
@@ -254,10 +245,13 @@ function ContractForm() {
         >
           계약서 보내기
         </Button> */}
-        <Button width={110} disabled>
+
+        {/* 일단 제출을 없앰  */}
+
+        {/* <Button width={110} disabled>
           어어
           <input type="submit" />
-        </Button>
+        </Button> */}
 
         {/* <Link href="/sign" scroll={false}> */}
         <Button type="button" width={110} onClick={toSign}>

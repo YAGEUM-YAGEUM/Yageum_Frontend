@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 interface ButtonProps {
   width: number;
-  onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  onClick?: any;
   children: any;
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
