@@ -56,6 +56,7 @@ function ChatModal({ children, onClose }: ChatModalProps) {
     }
 
     e.stopPropagation();
+    console.log('모달 닫기 버튼 클릭');
     onClose(); // onClose 함수 호출
   }
 
@@ -63,6 +64,7 @@ function ChatModal({ children, onClose }: ChatModalProps) {
     // 모달 외부
     <ModalOuterWrapper onMouseUp={(e) => handleClickClose(e)}>
       {/* // 모달 내부 */}
+
       <ModalInnerWrapper
         onMouseDown={(e) => handleMouseDown(e)}
         onMouseUp={(e) => handleMouseUp(e)}
