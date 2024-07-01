@@ -23,7 +23,16 @@ class WebSocketService {
     });
   }
 
+  isClientActive(): boolean {
+    return this.client.active;
+  }
+
   connect(onConnect: () => void) {
+    if (this.isClientActive()) {
+      console.log('웹소켓 이미 활성화.');
+      return;
+    }
+
     console.log('토큰으로 연결 시도 중:', this.token);
     this.client.onConnect = () => {
       console.log('WebSocket 연결 성공');

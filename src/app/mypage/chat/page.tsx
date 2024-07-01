@@ -79,10 +79,9 @@ function ChatPage({ token }: { token: string }) {
   }, [token]);
 
   useEffect(() => {
-    if (websocketService) {
+    if (websocketService && !websocketService.isClientActive()) {
       console.log('WebSocket 서비스에 연결 중'); // 추가 로그
       websocketService.connect(() => {
-        console.log('WebSocket 연결 성공 후 채팅방 목록 갱신');
         fetchChatRooms();
       });
     }
@@ -92,14 +91,12 @@ function ChatPage({ token }: { token: string }) {
     if (websocketService) {
       console.log(`채팅방 ${roomNo} 구독 중`);
       websocketService.connect(() => {
-        console.log(`WebSocket 연결 후 채팅방 ${roomNo} 구독`);
+        // onConnect 내부에서 구독을 수행
         websocketService.subscribe(roomNo.toString(), (message: any) => {
           console.log('수신한 메시지:', message);
         });
         setSelectedRoomNo(roomNo);
         setIsChatOpen(true); // 채팅 UI 열기
-        console.log('selectedRoomNo 설정:', roomNo);
-        console.log('isChatOpen 설정:', true);
       });
     }
   };
@@ -118,7 +115,6 @@ function ChatPage({ token }: { token: string }) {
 
   const closeModal = () => {
     setIsChatOpen(false);
-    console.log('채팅 모달 닫힘');
   };
 
   return (
