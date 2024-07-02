@@ -92,11 +92,15 @@ interface FormData {
 
 function ContractForm() {
   const router = useRouter();
-  const [web3] = useWeb3();
+  const [account, web3] = useWeb3();
   const { register, handleSubmit, setValue, watch } = useForm<FormData>();
   const formValues = watch();
 
   useEffect(() => {
+    // metamask가 설치되지 않으면 다시 이전 페이지로 이동
+    if (!account) {
+      router.back();
+    }
     // const storedFormData = typeof window !== 'undefined' ? localStorage.getItem('storedFormData') : null;
 
     // 다시 돌아왔을 때 localstorage에 내용 있으면 form 에 넣어서 보여주기
@@ -113,7 +117,7 @@ function ContractForm() {
   const toSign = () => {
     const formData = JSON.stringify(formValues);
     localStorage.setItem('contractFormData', formData);
-    router.push('/sign');
+    router.push('/sign', { scroll: false });
   };
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
