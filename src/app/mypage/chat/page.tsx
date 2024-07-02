@@ -87,16 +87,21 @@ function ChatPage({ token }: { token: string }) {
     }
   }, [websocketService]);
 
+  useEffect(() => {
+    console.log('selectedRoomNo:', selectedRoomNo);
+    console.log('isChatOpen:', isChatOpen);
+  }, [selectedRoomNo, isChatOpen]);
+
   const handleRoomSelect = (roomNo: number) => {
+    console.log(`채팅방 ${roomNo} 선택됨`);
+    setSelectedRoomNo(roomNo);
+    setIsChatOpen(true);
+
     if (websocketService) {
-      console.log(`채팅방 ${roomNo} 구독 중`);
       websocketService.connect(() => {
-        // onConnect 내부에서 구독을 수행
         websocketService.subscribe(roomNo.toString(), (message: any) => {
           console.log('수신한 메시지:', message);
         });
-        setSelectedRoomNo(roomNo);
-        setIsChatOpen(true); // 채팅 UI 열기
       });
     }
   };
