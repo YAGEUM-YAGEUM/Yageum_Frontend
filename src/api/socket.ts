@@ -49,10 +49,11 @@ class WebSocketService {
 
   subscribe(chatRoomId: string, onMessage: (message: any) => void) {
     if (this.client.connected) {
-      console.log('채팅방 구독 시도 중, 토큰:', this.token);
+      console.log(`채팅방 ${chatRoomId} 구독 시도 중, 토큰:`, this.token);
       this.subscription = this.client.subscribe(
         `/sub/chat/room/${chatRoomId}`,
         (message) => {
+          console.log('수신된 메시지:', message.body);
           onMessage(JSON.parse(message.body));
         },
         { Authorization: `Bearer ${this.token}` },
@@ -62,11 +63,11 @@ class WebSocketService {
     }
   }
 
-  sendMessage(destination: string, message: any) {
+  sendMessage(chatRoomId: string, message: any) {
     if (this.client.connected) {
       console.log('메시지 전송 시도 중, 토큰:', this.token);
       this.client.publish({
-        destination,
+        destination: `/pub/chat/talk/${chatRoomId}`,
         body: JSON.stringify(message),
         headers: { Authorization: `Bearer ${this.token}` },
       });

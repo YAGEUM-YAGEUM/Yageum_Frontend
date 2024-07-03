@@ -105,7 +105,6 @@ function ChatPage({ token }: { token: string }) {
       });
     }
   };
-
   const handleCreateChatRoom = async (
     houseId: number,
     participantId: number,

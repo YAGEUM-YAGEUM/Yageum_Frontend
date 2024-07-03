@@ -88,11 +88,15 @@ function Chat({ roomNo }: ChatProps) {
   useEffect(() => {
     if (websocketService) {
       websocketService.connect(() => {
+        console.log(`채팅방 ${roomNo} 구독 시작`);
         websocketService.subscribe(roomNo.toString(), (message: any) => {
+          console.log('새로운 메시지 수신:', message);
           setMessages((prevMessages) => [...prevMessages, message]);
         });
 
+        // 채팅 히스토리 가져오기
         getChatHistory(roomNo).then((response) => {
+          console.log('채팅 히스토리:', response.data);
           setMessages(response.data.chatList);
         });
       });
@@ -110,7 +114,8 @@ function Chat({ roomNo }: ChatProps) {
         contentType: 'TALK',
         content: input,
       };
-      websocketService?.sendMessage(`/pub/chat/talk/${roomNo}`, message);
+      console.log('메시지 전송:', message);
+      websocketService?.sendMessage(roomNo.toString(), message);
       setInput('');
     }
   };
