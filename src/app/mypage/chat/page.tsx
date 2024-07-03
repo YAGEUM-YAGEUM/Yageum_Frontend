@@ -91,18 +91,26 @@ function ChatPage({ token }: { token: string }) {
     console.log('selectedRoomNo:', selectedRoomNo);
     console.log('isChatOpen:', isChatOpen);
   }, [selectedRoomNo, isChatOpen]);
-
   const handleRoomSelect = (roomNo: number) => {
     console.log(`채팅방 ${roomNo} 선택됨`);
     setSelectedRoomNo(roomNo);
     setIsChatOpen(true);
 
     if (websocketService) {
-      websocketService.connect(() => {
+      if (websocketService.isClientActive()) {
+        console.log(`채팅방 ${roomNo} 구독 시도`);
         websocketService.subscribe(roomNo.toString(), (message: any) => {
           console.log('수신한 메시지:', message);
         });
-      });
+      } else {
+        console.log('WebSocket 연결 시도');
+        websocketService.connect(() => {
+          console.log(`채팅방 ${roomNo} 구독 시도`);
+          websocketService.subscribe(roomNo.toString(), (message: any) => {
+            console.log('수신한 메시지:', message);
+          });
+        });
+      }
     }
   };
   const handleCreateChatRoom = async (

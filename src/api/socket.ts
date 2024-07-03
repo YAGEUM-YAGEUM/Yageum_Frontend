@@ -60,6 +60,9 @@ class WebSocketService {
       );
     } else {
       console.error('WebSocket이 연결되지 않았습니다.');
+      this.connect(() => {
+        this.subscribe(chatRoomId, onMessage);
+      });
     }
   }
 

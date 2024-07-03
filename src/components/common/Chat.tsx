@@ -88,7 +88,7 @@ function Chat({ roomNo }: ChatProps) {
   useEffect(() => {
     if (websocketService) {
       websocketService.connect(() => {
-        console.log(`채팅방 ${roomNo} 구독 시작`);
+        console.log(`채팅방 ${roomNo} 구독 확인`);
         websocketService.subscribe(roomNo.toString(), (message: any) => {
           console.log('새로운 메시지 수신:', message);
           setMessages((prevMessages) => [...prevMessages, message]);
@@ -108,18 +108,17 @@ function Chat({ roomNo }: ChatProps) {
   }, [roomNo, websocketService]);
 
   const sendMessage = () => {
-    if (input.trim() !== '') {
+    if (input.trim() !== '' && websocketService) {
       const message = {
         roomId: roomNo,
         contentType: 'TALK',
         content: input,
       };
       console.log('메시지 전송:', message);
-      websocketService?.sendMessage(roomNo.toString(), message);
+      websocketService.sendMessage(roomNo.toString(), message);
       setInput('');
     }
   };
-
   const exitRoom = () => {
     const message = {
       roomId: roomNo,
