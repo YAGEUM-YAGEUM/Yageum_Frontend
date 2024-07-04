@@ -88,15 +88,12 @@ function Chat({ roomNo }: ChatProps) {
   useEffect(() => {
     if (websocketService) {
       websocketService.connect(() => {
-        console.log(`채팅방 ${roomNo} 구독 확인`);
         websocketService.subscribe(roomNo.toString(), (message: any) => {
           console.log('새로운 메시지 수신:', message);
           setMessages((prevMessages) => [...prevMessages, message]);
         });
 
-        // 채팅 히스토리 가져오기
         getChatHistory(roomNo).then((response) => {
-          console.log('채팅 히스토리:', response.data);
           setMessages(response.data.chatList);
         });
       });
@@ -111,17 +108,21 @@ function Chat({ roomNo }: ChatProps) {
     if (input.trim() !== '' && websocketService) {
       const message = {
         roomId: roomNo,
+        chatRoomNo: roomNo, // 추가: chatRoomNo 설정
         contentType: 'TALK',
         content: input,
+        // senderId: username,
       };
       console.log('메시지 전송:', message);
       websocketService.sendMessage(roomNo.toString(), message);
+      setMessages((prevMessages) => [...prevMessages, message]);
       setInput('');
     }
   };
+
   const exitRoom = () => {
     const message = {
-      roomId: roomNo,
+      roomNo,
       contentType: 'EXIT',
       content: `${username} 님이 퇴장하셨습니다.`,
     };
