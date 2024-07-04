@@ -5,19 +5,19 @@ import { Contract } from 'web3-eth-contract';
 
 // type ContractAbi = any;
 const useWeb3 = () => {
-  const [account, setAccount] = useState<string | undefined>(undefined);
+  const [account, setAccount] = useState<string>();
   const [web3, setWeb3] = useState<Web3 | undefined>(undefined);
   const [contract, setContract] = useState<Contract<ContractAbi> | undefined>(
     undefined,
   );
 
   // 프로미스 객체를 반환하므로 async-await
-  const getChainId = async () => {
-    const chainId = await window.ethereum.request({
-      method: 'eth_chainId',
-    });
-    return chainId;
-  };
+  // const getChainId = async () => {
+  //   const chainId = await window.ethereum.request({
+  //     method: 'eth_chainId',
+  //   });
+  //   return chainId;
+  // };
   const getReqAccounts = async () => {
     const acc = await window.ethereum.request({
       method: 'eth_requestAccounts',
@@ -25,32 +25,32 @@ const useWeb3 = () => {
     return acc; // 메타마스크 계정 연결 popup 뜨고, account 리턴
   };
 
-  const addNetwork = async (chainId: string) => {
-    const network = {
-      chainId,
-      chainName: 'yageumyageum',
-      rpcUrls: ['http://127.0.0.1:8545'],
-      nativeCurrency: {
-        name: 'Ethereum',
-        symbol: 'ETH',
-        decimals: 18,
-      },
-    };
-    await window.ethereum.request({
-      method: 'wallet_addEthereumChain',
-      params: [network],
-    });
-  };
+  // const addNetwork = async (chainId: string) => {
+  //   const network = {
+  //     chainId,
+  //     chainName: 'yageumyageum',
+  //     rpcUrls: ['http://127.0.0.1:8545'],
+  //     nativeCurrency: {
+  //       name: 'Ethereum',
+  //       symbol: 'ETH',
+  //       decimals: 18,
+  //     },
+  //   };
+  //   await window.ethereum.request({
+  //     method: 'wallet_addEthereumChain',
+  //     params: [network],
+  //   });
+  // };
 
   useEffect(() => {
     const init = async () => {
       try {
-        const targetChainId = '0x18db'; // 16진수로
+        // const targetChainId = '0x18db'; // 16진수로
 
-        const chainId = await getChainId();
-        if (targetChainId !== chainId) {
-          addNetwork(targetChainId);
-        }
+        // const chainId = await getChainId();
+        // if (targetChainId !== chainId) {
+        //   addNetwork(targetChainId);
+        // }
         const [resultAccount] = await getReqAccounts(); // 배열 구조분해할당
         const newWeb3 = new Web3(window.ethereum);
         setWeb3(newWeb3);
@@ -73,7 +73,9 @@ const useWeb3 = () => {
       init();
     } else {
       // 설치 안 된사람에게 실행할 부분
-      alert('원활한 계약을 위해 metamask를 설치해주십시오.');
+      alert(
+        '원활한 계약을 위해 metamask를 설치해주세요! 메타마스크가 없으면 계약이 진행되지 않습니다! ',
+      );
     }
   }, []);
   return [web3, account, contract];

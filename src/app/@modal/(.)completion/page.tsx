@@ -6,6 +6,14 @@ import useWeb3 from '@/hooks/contract/useWeb3';
 import Web3 from 'web3'; // Web3를 가져와 사용
 import { Contract } from 'web3-eth-contract';
 
+type SendingData = {
+  propertyAddress: string;
+  deposit: number;
+  rentAmount: number;
+  specialTerms: string;
+  lessorSignaturePad: string;
+};
+
 function CompletionModal() {
   const [web3, web3Account, contract] = useWeb3();
   const [account, setAccount] = useState<any>();
@@ -20,15 +28,71 @@ function CompletionModal() {
     }
   }, [web3Account]);
 
-  useEffect(() => {
-    const sendTransaction = async () => {
-      if (contract instanceof Contract) {
-        console.log('Contract address:', contract.options.address);
-        contract.methods.sendContract(); // Abi 값
+  /// 계약서 전송 로직
+  const sendContract = async () => {
+    // localstorage 내부 데이터 변수로전송하기
+    const formDataString = window.localStorage.getItem('contractFormData');
+    const signaturepadString =
+      window.localStorage.getItem('lessorSignaturePad');
+    const sendingDataArray: SendingData[] = [];
+
+    if (formDataString && signaturepadString) {
+      const formData = JSON.parse(formDataString);
+
+      // 객체를 배열에 추가
+      sendingDataArray.push({
+        ...formData,
+        lessorSignaturePad: signaturepadString,
+      });
+    }
+    console.log(sendingDataArray, '아악');
+    // 구조분해 할당이라 sendingDataArray[0]에 접근
+    if (sendingDataArray.length > 0) {
+      const {
+        propertyAddress,
+        deposit,
+        rentAmount,
+        specialTerms,
+        lessorSignaturePad,
+      } = sendingDataArray[0];
+
+      console.log(
+        typeof propertyAddress,
+        propertyAddress,
+        typeof rentAmount,
+        rentAmount,
+        sendingDataArray[0],
+        'GMR',
+      );
+
+      if (contract instanceof Contract && web3 instanceof Web3) {
+        const tenantAddress = '0x9522762832215abfdD70F61B4651F61aF2B975eB';
+        contract.methods
+          .sendContract(
+            tenantAddress,
+            rentAmount,
+            deposit,
+            propertyAddress,
+            specialTerms,
+            lessorSignaturePad,
+          )
+          .send({
+            from: account,
+            gas: '7000000',
+            // gasPrice: '200000000000',
+            gasPrice: '200000000000',
+          })
+          .on('receipt', function (receipt) {
+            // receipt example
+            console.log(receipt);
+          });
+        // gasLimit => 사용할 가스의 최대량, gasPrice => 가스의 가격(Wei단위)
       } else {
         console.log('Contract 가 없습니다..');
       }
-    };
+    }
+  };
+  useEffect(() => {
     const signMessage = async () => {
       if (web3 instanceof Web3 && account) {
         const message = '부동산 계약을 완료하기 위해 전자 서명을 해주세요. ';
@@ -36,7 +100,7 @@ function CompletionModal() {
           const eSignature = await web3.eth.personal.sign(message, account, '');
           setSignature(eSignature);
           console.log('전자서명 서명 완료:', eSignature);
-          sendTransaction();
+          sendContract();
         } catch (error) {
           console.error('서명 실패:', error);
         }

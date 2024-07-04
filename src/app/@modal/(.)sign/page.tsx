@@ -74,7 +74,7 @@ function SignatureModal() {
     if (dataUrl) {
       // dataUrl도 따로 localStorage에 저장!
       localStorage.setItem('lessorSignaturePad', dataUrl);
-      router.push('/completion');
+      router.push('/completion', { scroll: false });
     }
   }, [dataUrl, router]);
 
@@ -136,7 +136,7 @@ function SignatureModal() {
         </CanvasButtonWrapper>
         <Spacer size={20} />
         <Button width={110} onClick={submit}>
-          완성하기
+          계약서 완료하기
         </Button>
       </Wrapper>
     </Modal>

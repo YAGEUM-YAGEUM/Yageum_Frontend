@@ -1,4 +1,4 @@
-export const CONTRACT_ADDRESS = '0x75CB62A895560a0581F2f280a57a7Be4DB758257';
+export const CONTRACT_ADDRESS = '0xF68814d9f4548610A4608dA786501B95d01085f0'; // etherscan 의 contract address
 
 export const CONTRACT_ABI = [
   {
