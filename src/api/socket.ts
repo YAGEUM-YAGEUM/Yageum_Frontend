@@ -56,11 +56,11 @@ class WebSocketService {
           console.log('수신된 메시지:', message.body);
           onMessage(JSON.parse(message.body));
         },
-        { 
+        {
           Authorization: `Bearer ${this.token}`,
           chatRoomNo: '1',
-          houseId: '1'
-         },
+          houseId: '1',
+        },
       );
     } else {
       console.error('WebSocket이 연결되지 않았습니다.');
@@ -83,10 +83,11 @@ class WebSocketService {
     }
   }
 
-  disconnect() {
+  disconnect(chatRoomId: number) {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+    console.log(`Disconnecting from chat room ${chatRoomId}`);
     this.client.deactivate();
   }
 }
