@@ -2,6 +2,7 @@
 
 import styled, { css } from 'styled-components';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const Container = styled.div`
   display: flex;
@@ -46,6 +47,7 @@ const Box = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  cursor: pointer;
   /* justify-content: center; */
 `;
 const Img = styled.div`
@@ -80,7 +82,7 @@ const categories = [
 
 export default function leftBoard() {
   const [activeCategory, setActive] = useState(categories[0].id);
-
+  const router = useRouter();
   return (
     <Container>
       <BoxCategory>
@@ -95,7 +97,7 @@ export default function leftBoard() {
         ))}
       </BoxCategory>
       <BoxContainer>
-        <Box>
+        <Box onClick={() => router.push('/house')}>
           <Img></Img>
           <Description>
             <Price>월세 | 가격 / 가격</Price>
