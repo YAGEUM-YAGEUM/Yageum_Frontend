@@ -56,7 +56,11 @@ class WebSocketService {
           console.log('수신된 메시지:', message.body);
           onMessage(JSON.parse(message.body));
         },
-        { Authorization: `Bearer ${this.token}` },
+        { 
+          Authorization: `Bearer ${this.token}`,
+          chatRoomNo: '1',
+          houseId: '1'
+         },
       );
     } else {
       console.error('WebSocket이 연결되지 않았습니다.');
