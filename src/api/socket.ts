@@ -30,6 +30,7 @@ class WebSocketService {
   connect(onConnect: () => void) {
     if (this.isClientActive()) {
       console.log('웹소켓 이미 활성화.');
+      onConnect();
       return;
     }
 
@@ -48,38 +49,48 @@ class WebSocketService {
   }
 
   subscribe(chatRoomId: string, onMessage: (message: any) => void) {
-    if (this.client.connected) {
+    const subscribeToRoom = () => {
       console.log(`채팅방 ${chatRoomId} 구독 시도 중, 토큰:`, this.token);
       this.subscription = this.client.subscribe(
         `/sub/chat/room/${chatRoomId}`,
         (message) => {
           console.log('수신된 메시지:', message.body);
-          onMessage(JSON.parse(message.body));
-        },
-        {
-          Authorization: `Bearer ${this.token}`,
-          chatRoomNo: '1',
-          houseId: '1',
+          try {
+            const parsedMessage = JSON.parse(message.body);
+            onMessage(parsedMessage);
+          } catch (error) {
+            console.error('메시지 파싱 중 오류 발생:', error);
+          }
         },
       );
+    };
+
+    if (this.client.active) {
+      subscribeToRoom();
     } else {
-      console.error('WebSocket이 연결되지 않았습니다.');
+      console.log('WebSocket 연결 중... 연결 후 구독을 시도합니다.');
       this.connect(() => {
-        this.subscribe(chatRoomId, onMessage);
+        subscribeToRoom();
       });
     }
   }
 
   sendMessage(chatRoomId: string, message: any) {
-    if (this.client.connected) {
+    if (this.client.active) {
       console.log('메시지 전송 시도 중, 토큰:', this.token);
+      const fullMessage = {
+        ...message,
+        token: this.token.substring(7), // "Bearer " 제거
+      };
       this.client.publish({
         destination: `/pub/chat/talk/${chatRoomId}`,
-        body: JSON.stringify(message),
-        headers: { Authorization: `Bearer ${this.token}` },
+        body: JSON.stringify(fullMessage),
       });
     } else {
       console.error('WebSocket이 연결되지 않았습니다.');
+      this.connect(() => {
+        this.sendMessage(chatRoomId, message);
+      });
     }
   }
 
