@@ -62,6 +62,11 @@ class WebSocketService {
             console.error('메시지 파싱 중 오류 발생:', error);
           }
         },
+        {
+          Authorization: `Bearer ${this.token}`,
+          chatRoomNo: chatRoomId,
+          houseId: '1', // houseId를 필요에 따라 설정
+        },
       );
     };
 
@@ -85,6 +90,11 @@ class WebSocketService {
       this.client.publish({
         destination: `/pub/chat/talk/${chatRoomId}`,
         body: JSON.stringify(fullMessage),
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+          chatRoomNo: chatRoomId,
+          houseId: '1', // houseId 필요에 따라 값 변경
+        },
       });
     } else {
       console.error('WebSocket이 연결되지 않았습니다.');
