@@ -79,25 +79,28 @@ interface ChatProps {
 }
 
 function Chat({ roomNo }: ChatProps) {
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<any[]>([]); // 초기값을 빈 배열로 설정
   const [input, setInput] = useState<string>('');
   const username = 'yageum12'; // 예시
   const websocketService = useWebSocket();
 
-  // eslint-disable-next-line consistent-return
   useEffect(() => {
     if (websocketService) {
       websocketService.connect(() => {
         console.log(`채팅방 ${roomNo} 구독 확인`);
         websocketService.subscribe(roomNo.toString(), (message: any) => {
           console.log('새로운 메시지 수신:', message);
-          setMessages((prevMessages) => [...prevMessages, message]);
+          setMessages((prevMessages) =>
+            Array.isArray(prevMessages)
+              ? [...prevMessages, message]
+              : [message],
+          );
         });
 
         // 채팅 히스토리 가져오기
         getChatHistory(roomNo).then((response) => {
           console.log('채팅 히스토리:', response.data);
-          setMessages(response.data.chatList);
+          setMessages(response.data.chatList || []); // chatList가 없을 경우 빈 배열 설정
         });
       });
     }
@@ -116,7 +119,9 @@ function Chat({ roomNo }: ChatProps) {
       websocketService.sendMessage(roomNo.toString(), message);
 
       // 메시지를 즉시 화면에 표시
-      setMessages((prevMessages) => [...prevMessages, message]);
+      setMessages((prevMessages) =>
+        Array.isArray(prevMessages) ? [...prevMessages, message] : [message],
+      );
 
       setInput('');
     }
@@ -139,6 +144,7 @@ function Chat({ roomNo }: ChatProps) {
       alert('채팅방을 퇴장하였습니다.');
     });
   };
+
   return (
     <ChatContainer>
       <Header>Chat Room {roomNo}</Header>
