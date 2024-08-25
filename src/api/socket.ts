@@ -82,11 +82,13 @@ class WebSocketService {
 
   sendMessage(chatRoomId: string, message: any) {
     if (this.client.active) {
+      console.log('WebSocket 클라이언트 활성화 상태, 메시지 전송 시도');
       console.log('메시지 전송 시도 중, 토큰:', this.token);
       const fullMessage = {
         ...message,
         token: this.token.substring(7), // "Bearer " 제거
       };
+      console.log('전송할 전체 메시지:', fullMessage);
       this.client.publish({
         destination: `/pub/chat/talk/${chatRoomId}`,
         body: JSON.stringify(fullMessage),
@@ -96,8 +98,11 @@ class WebSocketService {
           houseId: '1', // houseId 필요에 따라 값 변경
         },
       });
+      console.log('메시지 발행 완료');
     } else {
-      console.error('WebSocket이 연결되지 않았습니다.');
+      console.log(
+        'WebSocket 클라이언트 비활성화 상태, 연결 후 메시지 전송 시도',
+      );
       this.connect(() => {
         this.sendMessage(chatRoomId, message);
       });

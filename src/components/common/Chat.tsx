@@ -115,8 +115,11 @@ function Chat({ roomNo }: ChatProps) {
         content: input,
         senderId: username,
       };
-      console.log('메시지 전송:', message);
+      console.log('메시지 전송 시도:', message);
       websocketService.sendMessage(roomNo.toString(), message);
+
+      // 메시지 전송 후 로그
+      console.log('메시지 전송 완료');
 
       // 메시지를 즉시 화면에 표시
       setMessages((prevMessages) =>

@@ -29,21 +29,24 @@ export const createChatRoom = async (
     const response = await apiClient.post('/chatroom', requestDto);
     return response.data;
   } catch (error) {
-    console.error('Failed to create chat room', error);
+    error('Failed to create chat room', error);
     throw error;
   }
 };
 
-export const getChatRooms = () => {
-  return apiClient.get('/chatrooms');
+export const getChatRooms = async () => {
+  const response = await apiClient.get('/chatrooms');
+  return response;
 };
 
-export const getChatHistory = (roomNo: number) => {
-  return apiClient.get(`/chatroom/${roomNo}`);
+export const getChatHistory = async (roomNo: number) => {
+  const response = await apiClient.get(`/chatroom/${roomNo}`);
+  return response;
 };
 
-export const exitChatRoom = (roomId: number, username: string) => {
-  return apiClient.post(`/chat/exit/${roomId}`, null, {
+export const exitChatRoom = async (roomId: number, username: string) => {
+  const response = await apiClient.post(`/chat/exit/${roomId}`, null, {
     params: { username },
   });
+  return response;
 };
