@@ -110,18 +110,15 @@ function Chat({ roomNo }: ChatProps) {
     if (input.trim() !== '' && websocketService) {
       const message = {
         roomId: roomNo,
-        chatRoomNo: roomNo,
-        contentType: 'TALK',
         content: input,
         senderId: username,
+        contentType: 'TALK',
       };
       console.log('메시지 전송 시도:', message);
       websocketService.sendMessage(roomNo.toString(), message);
 
-      // 메시지 전송 후 로그
       console.log('메시지 전송 완료');
 
-      // 메시지를 즉시 화면에 표시
       setMessages((prevMessages) =>
         Array.isArray(prevMessages) ? [...prevMessages, message] : [message],
       );
@@ -129,7 +126,6 @@ function Chat({ roomNo }: ChatProps) {
       setInput('');
     }
   };
-
   const exitRoom = () => {
     const message = {
       roomId: roomNo,

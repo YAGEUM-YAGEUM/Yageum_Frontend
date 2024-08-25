@@ -84,19 +84,16 @@ class WebSocketService {
     if (this.client.active) {
       console.log('WebSocket 클라이언트 활성화 상태, 메시지 전송 시도');
       console.log('메시지 전송 시도 중, 토큰:', this.token);
-      const fullMessage = {
-        ...message,
-        token: this.token.substring(7), // "Bearer " 제거
+
+      const headers = {
+        Authorization: `Bearer ${this.token}`,
       };
-      console.log('전송할 전체 메시지:', fullMessage);
+
+      console.log('전송할 메시지:', message);
       this.client.publish({
         destination: `/pub/chat/talk/${chatRoomId}`,
-        body: JSON.stringify(fullMessage),
-        headers: {
-          Authorization: `Bearer ${this.token}`,
-          chatRoomNo: chatRoomId,
-          houseId: '1', // houseId 필요에 따라 값 변경
-        },
+        body: JSON.stringify(message),
+        headers,
       });
       console.log('메시지 발행 완료');
     } else {
