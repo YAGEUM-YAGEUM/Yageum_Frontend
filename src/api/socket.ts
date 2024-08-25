@@ -91,7 +91,7 @@ class WebSocketService {
 
       console.log('전송할 메시지:', message);
       this.client.publish({
-        destination: `/pub/chat/talk/${chatRoomId}`,
+        destination: `/pub/chat/message`,
         body: JSON.stringify(message),
         headers,
       });

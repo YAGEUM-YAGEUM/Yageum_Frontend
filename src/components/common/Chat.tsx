@@ -109,19 +109,23 @@ function Chat({ roomNo }: ChatProps) {
   const sendMessage = () => {
     if (input.trim() !== '' && websocketService) {
       const message = {
-        roomId: roomNo,
+        chatRoomNo: roomNo,
+        contentType: 'TALK',
         content: input,
         senderId: username,
-        contentType: 'TALK',
+        senderName: username,
+        houseId: 1,
+        sendTime: new Date().getTime(),
+        readCount: 0,
       };
+
       console.log('메시지 전송 시도:', message);
       websocketService.sendMessage(roomNo.toString(), message);
 
       console.log('메시지 전송 완료');
 
-      setMessages((prevMessages) =>
-        Array.isArray(prevMessages) ? [...prevMessages, message] : [message],
-      );
+      // We don't need to add the message to the state here
+      // as it will be received back through the WebSocket subscription
 
       setInput('');
     }
