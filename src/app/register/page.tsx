@@ -4,16 +4,17 @@ import useFunnel from 'next-use-funnel';
 import FirstStep from './firstStep/page';
 import SecondStep from './secondStep/page';
 import ThirdStep from './thirdStep/page';
+import EndStep from './endStep/page';
 
 export type FunnelState = {
   name: any;
 };
 
-export { FirstStep, SecondStep, ThirdStep };
+export { FirstStep, SecondStep, ThirdStep, EndStep };
 
 function RegisterFunnel() {
   const [Funnel, state, setState] = useFunnel(
-    ['first', 'second', 'third'] as const,
+    ['first', 'second', 'third', 'end'] as const,
     {
       initialStep: 'first',
       onStepChange: (step) => console.log(step),
@@ -30,7 +31,10 @@ function RegisterFunnel() {
         <SecondStep next={() => setState({ step: 'third' })} />
       </Funnel.Step>
       <Funnel.Step name="third">
-        <ThirdStep next={() => console.log('Third step complete')} />
+        <ThirdStep next={() => setState({ step: 'end' })} />
+      </Funnel.Step>
+      <Funnel.Step name="end">
+        <EndStep />
       </Funnel.Step>
     </Funnel>
   );

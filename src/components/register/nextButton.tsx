@@ -12,6 +12,7 @@ const Button = styled.button`
   color: white;
   border: none;
   border-radius: 10px;
+  cursor: pointer;
 `;
 
 function NextButton({ onClick }: NextButtonProps) {
