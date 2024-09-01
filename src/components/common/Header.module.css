@@ -1,23 +1,24 @@
 .headerContainer {
-  width: 100%;
-  background-color: #f8f9fa;
+  background-color: #2e493c;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  border-radius: 25px;
+  padding: 10px;
 }
 .inputContainer {
   display: flex;
-  gap: 10px;
+  gap: 18px;
 }
 
 .logo {
-  font-size: 24px;
+  font-size: 23px;
   color: black;
 }
 
 .logo a {
   text-decoration: none;
-  color: black;
+  color: whitesmoke;
 }
 
 .searchContainer {
@@ -27,10 +28,12 @@
 }
 
 .searchInput {
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  padding: 10px;
+  padding-left: 13px;
+  border: 1px solid #003c1e;
+  border-radius: 20px;
   outline: none;
+  width: 20vw;
 }
 
 .searchIcon {
@@ -46,7 +49,7 @@
 }
 .navigation {
   display: flex;
-  gap: 30px;
+  gap: 40px;
   width: 650px;
 }
 .navigation li {
@@ -55,7 +58,8 @@
 
 .navigation a {
   text-decoration: none;
-  color: #007bff;
+  color: #ffffff;
+  font-size: 13px;
 }
 
 .navigation a:hover {
@@ -68,6 +72,6 @@
 }
 
 .button a {
-  color: inherit;
+  color: white;
   text-decoration: none;
 }

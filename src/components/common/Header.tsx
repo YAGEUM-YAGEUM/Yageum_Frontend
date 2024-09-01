@@ -25,19 +25,29 @@ function Header() {
       </div>
       <ul className={styles.navigation}>
         <li>
-          <Link href="/about">소개</Link>
+          <Link href="/about" legacyBehavior>
+            소개
+          </Link>
         </li>
         <li>
-          <Link href="/map">지도</Link>
+          <Link href="/map" legacyBehavior>
+            지도
+          </Link>
         </li>
         <li>
-          <Link href="/register">매물등록</Link>
+          <Link href="/register" legacyBehavior>
+            매물등록
+          </Link>
         </li>
         <li>
-          <Link href="/guide">부동산 가이드</Link>
+          <Link href="/guide" legacyBehavior>
+            부동산 가이드
+          </Link>
         </li>
         <li>
-          <Link href="/qa">Q&A</Link>
+          <Link href="/qa" legacyBehavior>
+            Q&A
+          </Link>
         </li>
         <li>
           <Link href="/mypage">마이페이지</Link>
