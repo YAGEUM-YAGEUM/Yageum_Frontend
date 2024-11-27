@@ -136,7 +136,29 @@ function Chat({ roomNo }: ChatProps) {
 
   useEffect(() => {
     scrollToBottom();
+    const unreadMessages = messages.filter(
+      (msg) => msg.readCount === 0 && msg.senderId !== username,
+    );
+    if (unreadMessages.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      markMessagesAsRead(unreadMessages);
+    }
   }, [messages]);
+
+  const markMessagesAsRead = (messagesToRead: Message[]) => {
+    if (websocketService) {
+      messagesToRead.forEach((msg) => {
+        const readMessage = {
+          ...msg,
+          contentType: 'READ',
+          senderId: username,
+          readCount: 1,
+        };
+
+        websocketService.sendMessage(roomNo.toString(), readMessage);
+      });
+    }
+  };
 
   useEffect(() => {
     if (websocketService) {
@@ -144,12 +166,23 @@ function Chat({ roomNo }: ChatProps) {
         console.log(`채팅방 ${roomNo} 구독 확인`);
         websocketService.subscribe(roomNo.toString(), (message: Message) => {
           console.log('새로운 메시지 수신:', message);
+
           setMessages((prevMessages) => {
             // 중복 메시지 체크를 위한 고유 식별자 생성
             const messageId = `${message.senderId}-${message.sendTime}`;
             const isDuplicate = prevMessages.some(
               (msg) => `${msg.senderId}-${msg.sendTime}` === messageId,
             );
+
+            // 읽음 처리 메시지인 경우 해당 메시지의 readCount 업데이트
+            if (message.contentType === 'READ') {
+              return prevMessages.map((msg) =>
+                msg.senderId === message.content &&
+                msg.sendTime === message.sendTime
+                  ? { ...msg, readCount: 1 }
+                  : msg,
+              );
+            }
 
             if (!isDuplicate) {
               return [...prevMessages, message];
